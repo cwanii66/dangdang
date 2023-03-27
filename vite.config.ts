@@ -29,10 +29,11 @@ export default defineConfig((envConfig) => {
         }
       }
     }
-
+    
     console.log('env -> development', server)
   } else if (curEnv === 'production') {
     console.log('env -> production', server)
+
     server = {
       port: envMap.VITE_PORT,
       host: envMap.VITE_HOST,
