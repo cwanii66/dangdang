@@ -5,6 +5,7 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "allowJs": true,
+    "declaration": false,
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
@@ -21,7 +22,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts",
@@ -30,5 +31,5 @@
     "src/**/*.vue",
     "./vite.config.ts"
   ],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }

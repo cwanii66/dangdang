@@ -10,12 +10,12 @@ export class ImgUtil {
         'imgList',
         ImgUtil.#imgList ?? {},
         sessionStorage,
-        { mergeDefaults: true, deep: true }
+        { mergeDefaults: true, deep: true },
       ))
-    
-    if (!sessionStorage.getItem('imgList')) {
+
+    if (!sessionStorage.getItem('imgList'))
       ImgUtil.#imgList = storeImgListFn()
-    }
+
     if (this.#isEmpty()) {
       this.loadAllImg()
       storeImgListFn()
@@ -32,17 +32,16 @@ export class ImgUtil {
 
   static loadAllImg() {
     const imgMap: Record<string, any> = import.meta.glob('../../assets/img/**/*.png', { eager: true })
-    let ap: string = ''
-    let imgName: string = ''
+    let ap = ''
+    let imgName = ''
     for (const rp in imgMap) {
       ap = imgMap[rp].default
       imgName = ap.slice(
         ap.lastIndexOf('/') + 1,
-        ap.lastIndexOf('.')
+        ap.lastIndexOf('.'),
       )
       ImgUtil.#imgList[imgName] = ap
     }
   }
 }
 export default ImgUtil.getImg
-

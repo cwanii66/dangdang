@@ -6,4 +6,3 @@ import { ImgUtil } from './utils/imgHandler'
 ImgUtil.storeImgList()
 
 createApp(App).mount('#app')
-

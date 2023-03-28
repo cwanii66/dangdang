@@ -10,8 +10,6 @@ const count = ref(0)
 <template>
   <h1>{{ msg }}</h1>
   <img :src="getImg('白夜行')" alt="">
-
-  
 </template>
 
 <style scoped>

@@ -1,13 +1,14 @@
 {
   "name": "dangdang",
-  "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "eslint --ext .ts --ext .vue  --ext js  src/"
   },
   "dependencies": {
     "@vueuse/core": "^9.13.0",
