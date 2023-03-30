@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import type { DotenvParseOutput } from 'dotenv'
 import dotenv from 'dotenv'
+import Inspect from 'vite-plugin-inspect'
 
 // https://vitejs.dev/config/
 export default defineConfig((envConfig) => {
@@ -44,6 +45,10 @@ export default defineConfig((envConfig) => {
   return {
     plugins: [
       vue(),
+      Inspect({
+        build: true,
+        outputDir: '.vite-inspect',
+      }),
     ],
     // server,
   }
