@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fs from 'node:fs'
 import type { CommonServerOptions } from 'vite'
 import { defineConfig } from 'vite'
