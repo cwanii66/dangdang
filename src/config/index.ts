@@ -43,7 +43,7 @@ class EnvConfigClass {
   getAllConfig() {
     this.allConfig = {
       env: this.curEnv,
-      isMock: false,
+      isMock: false, // HACK: mock default is false
       ...this.envConfig[this.curEnv],
     }
   }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import getImg from '../utils/imgHandler'
+import getImg from '../utils/imgUtil
 
 defineProps<{ msg: string }>()
 
