@@ -28,3 +28,4 @@ dist-ssr
 
 # assets, exclude images
 src/assets/img/*
+/assets

@@ -6,7 +6,7 @@
   <div class="content">
     <!-- input element -->
     <div class="search-bar">
-      <i class="icon magnifier"></i>
+      <i class="iconfont "></i>
     </div>
     <div class="message"></div>
   </div>
