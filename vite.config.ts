@@ -1,11 +1,14 @@
 /* eslint-disable no-console */
 import fs from 'node:fs'
+import { resolve } from 'node:path'
 import type { CommonServerOptions } from 'vite'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import type { DotenvParseOutput } from 'dotenv'
 import dotenv from 'dotenv'
 // import Inspect from 'vite-plugin-inspect'
+
+const publicSrc = resolve(__dirname, 'src')
 
 /** @type {import('vite').UserConfig} */
 export default defineConfig((envConfig) => {
@@ -44,14 +47,14 @@ export default defineConfig((envConfig) => {
     }
   }
   return {
+    resolve: {
+      alias: {
+        '@': `${publicSrc}/`,
+      },
+    },
     plugins: [
       vue(),
     ],
     // server,
-    resolve: {
-      alias: {
-        '@': '/src',
-      },
-    },
   }
 })

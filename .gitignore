@@ -25,3 +25,6 @@ dist-ssr
 
 # plugin
 .vite-inspect
+
+# assets, exclude images
+src/assets/img/*
