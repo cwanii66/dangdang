@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar.vue'
 
 <template>
   <SearchBar />
-  <div> Book Category </div>
+  <div></div>
 </template>
 
 <style scoped>
