@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import SearchBar from './components/SearchBar.vue'
+import Ctgy from './components/Ctgy.vue'
 </script>
 
 <template>
   <SearchBar />
-  <div></div>
+  <Ctgy />
 </template>
 
 <style scoped>

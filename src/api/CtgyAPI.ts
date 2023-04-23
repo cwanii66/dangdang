@@ -3,7 +3,7 @@ import request from '../utils/axiosUtil'
 class CtgyAPI {
   static ctgyAPI: CtgyAPI = new CtgyAPI()
   getFirstCtgyList() {
-    return request.get('/ctgymodule/findFirstCtgyList', false)
+    return request.get('/ctgymodule/findFirstCtgys', false)
   }
 
   getSecThrdCtgyList(firstCtgyId: number) {

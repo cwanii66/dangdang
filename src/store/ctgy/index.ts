@@ -25,13 +25,13 @@ export const ctgyModule: Module<CtgyState, {}> = {
   actions: {
     async findFirstCtgyList({ commit }) {
       const ret = await ctgyAPI.getFirstCtgyList()
-      commit('storeFirstCtgyList', ret.data)
-      console.log(ret.data)
+      commit('storeFirstCtgyList', ret)
+      console.log({ ret })
     },
     async findSecThrdCtgyList({ commit }, firstCtgyId: number) {
       const ret = await ctgyAPI.getSecThrdCtgyList(firstCtgyId)
-      commit('storeSecThrdCtgyList', ret.data)
-      console.log(ret.data)
+      commit('storeSecThrdCtgyList', ret)
+      console.log({ ret })
     },
   },
 }

@@ -55,6 +55,6 @@ export default defineConfig((envConfig) => {
     plugins: [
       vue(),
     ],
-    // server,
+    server,
   }
 })

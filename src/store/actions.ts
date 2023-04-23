@@ -1,1 +1,1 @@
-export * from '@/store/ctgy/actions'
+export { default } from '@/store/ctgy/actions'

@@ -1,8 +1,6 @@
 import store from '@/store'
 
 class CtgyActions {
-  static ctgyActions: CtgyActions = new CtgyActions()
-
   static async findFirstCtgyList() {
     await store.dispatch('ctgyModule/findFirstCtgyList')
   }
@@ -12,4 +10,4 @@ class CtgyActions {
   }
 }
 
-export default CtgyActions.ctgyActions
+export default CtgyActions
