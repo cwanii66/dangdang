@@ -1,6 +1,6 @@
 export interface FirstCtgy {
   firstctgyId: number
-  firstctgyname: string
+  name: string
 }
 
 export interface SecondCtgy {
