@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import FirstToThirdCtgy from '../service'
 
-const { firstCtgyList, firstCtgyActiveIndex, setActiveIndex, getFirstCtgys } = FirstToThirdCtgy
+const { firstCtgyList, firstCtgyActiveIndex, setActiveIndex, getAllCtgys } = FirstToThirdCtgy
 
-getFirstCtgys()
+getAllCtgys()
 </script>
 
 <template>
