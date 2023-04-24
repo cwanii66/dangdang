@@ -4,14 +4,16 @@ export interface FirstCtgy {
 }
 
 export interface SecondCtgy {
-  seccctgyId: number
-  seccctgyname: string
-  thirdctgy: ThirdCtgy[]
+  firstctgyId: number
+  secondctgyId: number
+  secondgyname: string
+  thirdctgys: ThirdCtgy[]
 }
 
 export interface ThirdCtgy {
   thirdctgyId: number
-  thirdctgyname: string
+  thirdname: string
+  secctgyid: number
 }
 
 export interface CtgyState {

@@ -25,7 +25,6 @@ class FirstToThirdCtgy {
     watchEffect(async () => {
       await CtgyActions.findSecThrdCtgyList(this.firstCtgyActiveIndex.value + 1)
       this.secondCtgyList.value = ctgyGetters.getSecThrdCtgyList
-      console.log('views ctgy:', this.secondCtgyList.value)
     })
   }
 
