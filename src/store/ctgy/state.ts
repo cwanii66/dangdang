@@ -8,6 +8,8 @@ export interface SecondCtgy {
   secondctgyId: number
   secondgyname: string
   thirdctgys: ThirdCtgy[]
+  subThirdCtgys: ThirdCtgy[]
+  isSpreadCtgys: boolean
 }
 
 export interface ThirdCtgy {

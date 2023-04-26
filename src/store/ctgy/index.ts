@@ -25,13 +25,18 @@ export const ctgyModule: Module<CtgyState, {}> = {
   actions: {
     async findFirstCtgyList({ commit }) {
       const ret = await ctgyAPI.getFirstCtgyList()
-      commit('storeFirstCtgyList', ret)
-      console.log({ ret })
+      commit('storeFirstCtgyList', ret.data)
+      console.log('firstctgy: ', ret.data)
     },
     async findSecThrdCtgyList({ commit }, firstCtgyId: number) {
       const ret = await ctgyAPI.getSecThrdCtgyList(firstCtgyId)
-      commit('storeSecThrdCtgyList', ret)
-      console.log({ ret })
+      ret.data = ret.data.map((secondctgy: SecondCtgy) => {
+        secondctgy.isSpreadCtgys = false
+        secondctgy.subThirdCtgys = secondctgy.thirdctgys.slice(0, 5)
+        return secondctgy
+      })
+      commit('storeSecThrdCtgyList', ret.data)
+      console.log('secondctgy: ', ret.data)
     },
   },
 }

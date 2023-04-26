@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import FirstToThirdCtgy from '../service'
 import ThirdCtgy from './ThirdCtgy.vue'
+import type { SecondCtgy } from '@/store/state'
 
 const {
   firstCtgyList,
@@ -11,6 +12,15 @@ const {
 } = FirstToThirdCtgy
 
 getAllCtgys()
+
+function getThirdCtgyProps(secondctgy: SecondCtgy) {
+  return {
+    thirdctgys: secondctgy.thirdctgys,
+    isSpreadCtgys: secondctgy.isSpreadCtgys,
+    subThirdCtgys: secondctgy.subThirdCtgys,
+    secondctgy,
+  }
+}
 </script>
 
 <template>
@@ -27,9 +37,10 @@ getAllCtgys()
           <li class="secthrdctgy-item">
             <div class="secondctgy-item">
               <span class="secctgyname"> {{ secondctgy.secondgyname }} </span>
-              <span class="secctgyname-gallery"> {{ secondctgy.secondgyname }}馆 <i class="iconfont icon-xiangyoujiantou"></i> </span>
+              <span class="secctgyname-gallery"> {{ secondctgy.secondgyname }}馆 <i
+                  class="iconfont icon-xiangyoujiantou"></i> </span>
             </div>
-            <ThirdCtgy :thirdctgys="secondctgy.thirdctgys" />
+            <ThirdCtgy v-bind="getThirdCtgyProps(secondctgy)" />
           </li>
         </template>
       </ul>
@@ -91,11 +102,13 @@ getAllCtgys()
           justify-content: space-between;
           align-items: center;
           height: 0.73rem;
+
           .secctgyname {
             color: #0d0d0d;
             font-size: 0.2rem;
             font-weight: 600;
           }
+
           .secctgyname-gallery {
             color: #999;
             font-size: 0.14rem;

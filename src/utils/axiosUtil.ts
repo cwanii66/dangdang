@@ -48,19 +48,27 @@ class AxiosUtil {
       (req) => {
         return req
       },
+      (err) => {
+        ElMessage.error(`request error: ${err}`)
+      },
     )
   }
 
   beforeResponseIntercept() {
     this.axiosInstance.interceptors.response.use(
       (res) => {
-        const { data, msg, code } = res.data
-        if (code === 200)
-          return data
-        else if (code === 500)
-          return ElMessage.error(`error: ${msg}`)
-        else
-          return ElMessage.error('error: unknown')
+        const { msg, code } = res.data
+        if (code === 200) {
+          return res.data // match the server response data structure
+        }
+        else if (code === 500) {
+          ElMessage.error(`error: ${msg}`)
+          return Promise.reject(msg)
+        }
+        else {
+          ElMessage.error('error: unknown')
+          return Promise.reject(msg)
+        }
       },
       err => ElMessage.error(`network error: ${err}`),
     )
@@ -80,10 +88,11 @@ class AxiosUtil {
 
   // TS: finish type of req method auto prompt
   reqPrepare() {
-    methods.forEach((m) => {
-      this.request[m] = (url, isMock, data) => {
+    methods.forEach((method) => {
+      this.request[method] = (url, isMock, data) => {
         return this.sendRequest({
           url,
+          method,
           data,
           isMock,
         })

@@ -1,21 +1,42 @@
 <script setup lang="ts">
-import type { ThirdCtgy } from '@/store/state'
+import { ref } from 'vue'
+import type { SecondCtgy, ThirdCtgy } from '@/store/state'
 
-defineProps<{
+const props = defineProps<{
   thirdctgys: ThirdCtgy[]
+  isSpreadCtgys: boolean
+  secondctgy: SecondCtgy
+  subThirdCtgys: ThirdCtgy[]
 }>()
 
-function displayClass(index: number, length: number) {
-  return (index % 3 !== 0 && index !== length) ? '' : 'hidden'
+const spreadSwitcher = ref<string>('展开')
+const spreadFlag = ref<boolean>(props.isSpreadCtgys)
+const spreadIconClass = ref<string>('icon-xiangxiajiantou')
+function switchSpread() {
+  spreadSwitcher.value = spreadSwitcher.value === '展开' ? '收起' : '展开'
+  spreadIconClass.value = spreadSwitcher.value === '展开' ? 'icon-xiangxiajiantou' : 'icon-xiangshangjiantou'
+  spreadFlag.value = !spreadFlag.value
+}
+
+function displayClass(index: number) {
+  return (index % 3 !== 0) ? '' : 'hidden'
 }
 </script>
 
 <template>
   <ul class="thirdctgy">
-    <li class="thirdctgy-item" v-for="({ thirdctgyId, thirdname }, index) in thirdctgys" :key="thirdctgyId">
+    <li class="thirdctgy-item" v-for="({ thirdctgyId, thirdname }, index) in (spreadFlag ? thirdctgys : subThirdCtgys)"
+      :key="thirdctgyId">
       <span class="thirdname">{{ thirdname }}</span>
-      <i class="iconfont icon-shuxian" :class="displayClass(index + 1, thirdctgys.length)"></i>
+      <i class="iconfont icon-shuxian" :class="displayClass(index + 1)"></i>
     </li>
+
+    <div class="spread">
+      <div class="spread-button" @click="switchSpread">
+        <span> {{ spreadSwitcher }} </span>
+        <i class="iconfont" :class="spreadIconClass"></i>
+      </div>
+    </div>
   </ul>
 </template>
 
@@ -32,6 +53,22 @@ function displayClass(index: number, length: number) {
 
     .thirdname {
       flex: 1;
+    }
+  }
+
+  .spread {
+    width: 1.25rem;
+    grid-column-end: 4;
+    padding: 0.2rem 0;
+    color: rgba(150, 150, 150, 0.818);
+
+    &-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .iconfont {
+        font-size: 0.03rem;
+      }
     }
   }
 }
