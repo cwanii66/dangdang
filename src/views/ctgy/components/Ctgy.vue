@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import FirstToThirdCtgy from '../service'
 import ThirdCtgy from './ThirdCtgy.vue'
-import type { SecondCtgy } from '@/store/state'
+import type { SecondCtgy } from '@/pstore/ctgy/state'
 
 const {
-  firstCtgyList,
+  ctgyStoreRefs,
   firstCtgyActiveIndex,
-  secondCtgyList,
   setActiveIndex,
   getAllCtgys,
 } = FirstToThirdCtgy
-
+const { firstCtgyList, secondCtgyList } = ctgyStoreRefs
 getAllCtgys()
 
 function getThirdCtgyProps(secondctgy: SecondCtgy) {

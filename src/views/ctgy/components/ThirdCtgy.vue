@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { SecondCtgy, ThirdCtgy } from '@/store/state'
+import type { SecondCtgy, ThirdCtgy } from '@/pstore/ctgy/state'
 
 const props = defineProps<{
   thirdctgys: ThirdCtgy[]

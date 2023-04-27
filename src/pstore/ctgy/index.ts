@@ -13,8 +13,6 @@ export const useCtgyStore = defineStore('ctgy-store', {
     async findFirstCtgyList() {
       const ret = await ctgyAPI.getFirstCtgyList()
       this.firstCtgyList = ret.data
-      // eslint-disable-next-line no-console
-      console.log('firstctgy: ', ret.data)
     },
     async findSecThrdCtgyList(firstCtgyId: number) {
       const ret = await ctgyAPI.getSecThrdCtgyList(firstCtgyId)
@@ -24,8 +22,6 @@ export const useCtgyStore = defineStore('ctgy-store', {
         return secondctgy
       })
       this.secondCtgyList = ret.data
-      // eslint-disable-next-line no-console
-      console.log('secondctgy: ', ret.data)
     },
   },
 })

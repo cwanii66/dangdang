@@ -1,21 +1,18 @@
 import type { Ref } from 'vue'
 import { ref, watchEffect } from 'vue'
+import { storeToRefs } from 'pinia'
 
-import type { FirstCtgy, SecondCtgy } from '@/pstore/state'
 import { useCtgyStore } from '@/pstore/ctgy'
 
 const ctgyStore = useCtgyStore()
 
 // service class for First to Third category
 class FirstToThirdCtgy {
-  static ctgyStore = ctgyStore
+  static ctgyStoreRefs = storeToRefs(ctgyStore)
   static firstCtgyActiveIndex: Ref<number> = ref(0)
-  static firstCtgyList: Ref<FirstCtgy[]> = ref([])
-  static secondCtgyList: Ref<SecondCtgy[]> = ref([])
 
   static async getFirstCtgys() {
     await ctgyStore.findFirstCtgyList()
-    FirstToThirdCtgy.firstCtgyList.value = ctgyStore.getFirstCtgyList
   }
 
   static setActiveIndex(index: number) {
@@ -26,7 +23,6 @@ class FirstToThirdCtgy {
   static getSecThrdCtgys() {
     watchEffect(async () => {
       await ctgyStore.findSecThrdCtgyList(this.firstCtgyActiveIndex.value + 1)
-      this.secondCtgyList.value = ctgyStore.getSecThrdCtgyList
     })
   }
 
