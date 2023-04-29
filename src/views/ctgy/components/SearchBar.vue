@@ -19,37 +19,17 @@
 </template>
 
 <style lang="scss" scoped>
+@use '@/assets/css/common' as *;
   .content {
-    position: fixed;
-    display: flex;
-    margin: 0 .18rem;
-    width: 5.04rem;
-    height: 0.85rem;
-    align-items: center;
+    @extend .multiplex-content;
     .search-bar {
-      display: flex;
-      align-items: center;
-      width: 4.32rem;
-      height: 0.67rem;
-      background-color: #f6f6f6;
-      border-radius: 1rem;
+      @extend .multiplex-search-bar;
       .icon-fangdajing {
         font-size: 0.32rem;
         margin: 0 0.2rem;
       }
       .search-keyword {
-        display: flex;
-        align-items: center;
-        gap: 0.2rem;
-        width: 3.5rem;
-        height: 0.63rem;
-        & > .search-keyword-input {
-          width: 2.8rem;
-          height: 0.63rem;
-          background: none;
-          border: none;
-          font-size: 0.28rem;
-        }
+        @extend .multiplex-search-keyword;
         .icon-iconfontscan {
           font-size: 0.32rem;
         }

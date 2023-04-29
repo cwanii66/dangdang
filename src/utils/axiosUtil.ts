@@ -40,7 +40,7 @@ class AxiosUtil {
   }
 
   createAxiosInstance() {
-    this.axiosInstance = axios.create({ timeout: 15000 })
+    this.axiosInstance = axios.create({ timeout: 6000 })
   }
 
   beforeRequestIntercept() {
@@ -70,7 +70,9 @@ class AxiosUtil {
           return Promise.reject(msg)
         }
       },
-      err => ElMessage.error(`network error: ${err}`),
+      (err) => {
+        ElMessage.error(`network error: ${err}`)
+      },
     )
   }
 

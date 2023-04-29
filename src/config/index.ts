@@ -30,7 +30,7 @@ class EnvConfigClass {
   initEnvConfig() {
     this.envConfig = {
       development: {
-        baseApi: '/dang',
+        baseApi: import.meta.env.VITE_BASE_URL,
         mockBaseApi: '/mock-api',
       },
       production: {

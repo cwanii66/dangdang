@@ -27,7 +27,7 @@ function displayClass(index: number) {
   <ul class="thirdctgy">
     <li class="thirdctgy-item" v-for="({ thirdctgyId, thirdname }, index) in (spreadFlag ? thirdctgys : subThirdCtgys)"
       :key="thirdctgyId">
-      <span class="thirdname">{{ thirdname }}</span>
+      <router-link class="thirdname" :to="{ name: 'books', query: { thirdctgyId } }">{{ thirdname }}</router-link>
       <i class="iconfont icon-shuxian" :class="displayClass(index + 1)"></i>
     </li>
 
@@ -52,6 +52,8 @@ function displayClass(index: number) {
     padding: 0.2rem 0;
 
     .thirdname {
+      text-decoration: none;
+      color: inherit;
       flex: 1;
     }
   }
