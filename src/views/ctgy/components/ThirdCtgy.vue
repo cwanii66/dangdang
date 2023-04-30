@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import FstToThrdCtgy from '../service'
 import type { SecondCtgy, ThirdCtgy } from '@/pstore/ctgy/state'
 
 const props = defineProps<{
@@ -8,6 +9,8 @@ const props = defineProps<{
   secondctgy: SecondCtgy
   subThirdCtgys: ThirdCtgy[]
 }>()
+
+const { navigateToBooks } = FstToThrdCtgy
 
 const spreadSwitcher = ref<string>('展开')
 const spreadFlag = ref<boolean>(props.isSpreadCtgys)
@@ -25,9 +28,9 @@ function displayClass(index: number) {
 
 <template>
   <ul class="thirdctgy">
-    <li class="thirdctgy-item" v-for="({ thirdctgyId, thirdname }, index) in (spreadFlag ? thirdctgys : subThirdCtgys)"
-      :key="thirdctgyId">
-      <router-link class="thirdname" :to="{ name: 'books', query: { thirdctgyId } }">{{ thirdname }}</router-link>
+    <li class="thirdctgy-item" v-for="(thirdctgy, index) in (spreadFlag ? thirdctgys : subThirdCtgys)"
+      :key="thirdctgy.thirdctgyId">
+      <a class="thirdname" @click="navigateToBooks(thirdctgy)">{{ thirdctgy.thirdname }}</a>
       <i class="iconfont icon-shuxian" :class="displayClass(index + 1)"></i>
     </li>
 

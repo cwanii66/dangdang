@@ -1,8 +1,10 @@
 import type { Ref } from 'vue'
 import { ref, watchEffect } from 'vue'
 import { storeToRefs } from 'pinia'
+import router from '@/router'
 
 import { useCtgyStore } from '@/pstore/ctgy'
+import type { ThirdCtgy } from '@/pstore/ctgy/state'
 
 const ctgyStore = useCtgyStore()
 
@@ -29,6 +31,17 @@ class FirstToThirdCtgy {
   static getAllCtgys() {
     FirstToThirdCtgy.getFirstCtgys()
     FirstToThirdCtgy.getSecThrdCtgys()
+  }
+
+  static navigateToBooks(thirdCtgy: ThirdCtgy) {
+    ctgyStore.storeCtgy(thirdCtgy)
+    router.push({
+      name: 'books',
+    })
+  }
+
+  static back() {
+    router.back()
   }
 }
 

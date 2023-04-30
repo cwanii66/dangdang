@@ -1,16 +1,18 @@
 <script setup lang="ts">
+import FstToThrdCtgy from '@/views/ctgy/service'
 
+const { ctgyStoreRefs, back } = FstToThrdCtgy
+const { getThirdCtgy } = ctgyStoreRefs
 </script>
 
 <template>
   <div class="content">
-    <i class="iconfont icon-xiangzuojiantou"></i>
+    <span @click="back"><i class="iconfont icon-xiangzuojiantou" /></span>
     <div class="search-bar">
       <i class="iconfont icon-fangdajing"></i>
       <div class="search-keyword">
-        <!-- multiple render in future -->
         <div class="input-keyword">
-          <span class="keyword"> keyword </span>
+          <span class="keyword"> {{ getThirdCtgy.thirdname }} </span>
           <i class="iconfont icon-close"></i>
         </div>
         <div class="input-bar">
@@ -19,7 +21,7 @@
         </div>
       </div>
     </div>
-    <i class="iconfont icon-iosgengduo_o more"></i>
+    <i class="iconfont icon-iosgengduo_o more" />
   </div>
 </template>
 
@@ -51,7 +53,7 @@
         padding: 0.09rem 0.45rem 0.09rem 0.13rem;
         color: white;
         .keyword {
-          flex: 1;
+          white-space: nowrap;
         }
         .icon-close {
           justify-self: flex-end;
