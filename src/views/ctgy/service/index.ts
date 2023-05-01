@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import router from '@/router'
 
 import { useCtgyStore } from '@/pstore/ctgy'
-import type { ThirdCtgy } from '@/pstore/ctgy/state'
+import type { SecondCtgy, ThirdCtgy } from '@/pstore/ctgy/state'
 
 const ctgyStore = useCtgyStore()
 
@@ -15,10 +15,17 @@ class FirstToThirdCtgy {
 
   static async getFirstCtgys() {
     await ctgyStore.findFirstCtgyList()
+    FirstToThirdCtgy.#storeFirstCtgy(0)
+  }
+
+  static #storeFirstCtgy(index: number) {
+    const firstCtgy = ctgyStore.firstCtgyList.find(firstCtgy => firstCtgy.firstctgyId === index + 1)
+    ctgyStore.storeFirstCtgy(firstCtgy!)
   }
 
   static setActiveIndex(index: number) {
     FirstToThirdCtgy.firstCtgyActiveIndex.value = index
+    FirstToThirdCtgy.#storeFirstCtgy(index)
   }
 
   // get second and third category list
@@ -33,8 +40,9 @@ class FirstToThirdCtgy {
     FirstToThirdCtgy.getSecThrdCtgys()
   }
 
-  static navigateToBooks(thirdCtgy: ThirdCtgy) {
-    ctgyStore.storeCtgy(thirdCtgy)
+  static navigateToBooks(thirdCtgy: ThirdCtgy, secondCtgy: SecondCtgy) {
+    ctgyStore.storeThirdCtgy(thirdCtgy)
+    ctgyStore.storeSecondCtgy(secondCtgy)
     router.push({
       name: 'books',
     })

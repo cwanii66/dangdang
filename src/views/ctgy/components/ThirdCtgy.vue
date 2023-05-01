@@ -30,7 +30,7 @@ function displayClass(index: number) {
   <ul class="thirdctgy">
     <li class="thirdctgy-item" v-for="(thirdctgy, index) in (spreadFlag ? thirdctgys : subThirdCtgys)"
       :key="thirdctgy.thirdctgyId">
-      <a class="thirdname" @click="navigateToBooks(thirdctgy)">{{ thirdctgy.thirdname }}</a>
+      <a class="thirdname" @click="navigateToBooks(thirdctgy, secondctgy)">{{ thirdctgy.thirdname }}</a>
       <i class="iconfont icon-shuxian" :class="displayClass(index + 1)"></i>
     </li>
 

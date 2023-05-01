@@ -1,19 +1,12 @@
-import { useStorage } from '@vueuse/core'
-import { unref } from 'vue'
+import storage from 'store'
 
 export class ImgUtil {
   static #imgList: Record<string, string> = {}
 
   static storeImgList() {
-    const storeImgListFn = () =>
-      unref(useStorage(
-        'imgList',
-        ImgUtil.#imgList ?? {},
-        sessionStorage,
-        { mergeDefaults: true, deep: true },
-      ))
+    const storeImgListFn = () => storage.set('imgList', ImgUtil.#imgList ?? {})
 
-    if (!sessionStorage.getItem('imgList'))
+    if (!storage.get('imgList'))
       ImgUtil.#imgList = storeImgListFn()
 
     if (this.#isEmpty()) {
@@ -31,7 +24,7 @@ export class ImgUtil {
   }
 
   static loadAllImg() {
-    const imgMap: Record<string, any> = import.meta.glob('../../assets/img/**/*.png', { eager: true })
+    const imgMap: Record<string, any> = import.meta.glob('../assets/img/**/*.png', { eager: true })
     let ap = ''
     let imgName = ''
     for (const rp in imgMap) {
