@@ -6,7 +6,7 @@ import router from '@/router'
 import { useCtgyStore } from '@/pstore/ctgy'
 import type { SecondCtgy, ThirdCtgy } from '@/pstore/ctgy/state'
 
-const ctgyStore = useCtgyStore()
+export const ctgyStore = useCtgyStore()
 
 // service class for First to Third category
 class FirstToThirdCtgy {
@@ -41,15 +41,25 @@ class FirstToThirdCtgy {
   }
 
   static navigateToBooks(thirdCtgy: ThirdCtgy, secondCtgy: SecondCtgy) {
-    ctgyStore.storeThirdCtgy(thirdCtgy)
-    ctgyStore.storeSecondCtgy(secondCtgy)
+    FirstToThirdCtgy.storeCtgysWhenNavigate(thirdCtgy, secondCtgy)
     router.push({
       name: 'books',
     })
   }
 
+  static storeCtgysWhenNavigate(thirdCtgy: ThirdCtgy, secondCtgy: SecondCtgy) {
+    ctgyStore.storeThirdCtgy(thirdCtgy)
+    ctgyStore.storeSecondCtgy(secondCtgy)
+    ctgyStore.storeThirdCtgyList(secondCtgy.thirdctgys)
+    ctgyStore.storeSubThirdCtgyList(secondCtgy.subThirdCtgys)
+  }
+
   static back() {
     router.back()
+  }
+
+  static openOrCollapseInBook(isSpreadCtgys: boolean) {
+    ctgyStore.isSpreadCtgys = isSpreadCtgys
   }
 }
 

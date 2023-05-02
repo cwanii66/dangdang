@@ -5,15 +5,12 @@ import type { FirstCtgy, SecondCtgy, ThirdCtgy } from './state'
 import ctgyAPI from '@/api/CtgyAPI'
 
 function isEmptyObject(obj: object) {
-  return JSON.stringify(obj) === '{}'
+  return Object.keys(obj).length === 0
 }
 
 export const useCtgyStore = defineStore('ctgy-store', {
   state: () => ({
     ...initialCtgyState,
-    firstCtgy: {} as FirstCtgy,
-    secondCtgy: {} as SecondCtgy,
-    thirdCtgy: {} as ThirdCtgy,
   }),
   getters: {
     getFirstCtgyList: state => state.firstCtgyList,
@@ -26,6 +23,12 @@ export const useCtgyStore = defineStore('ctgy-store', {
     },
     getSecondCtgy: (state): SecondCtgy => {
       return isEmptyObject(state.secondCtgy) ? storage.get('secondctgy') : state.secondCtgy
+    },
+    getThirdCtgyList: (state): ThirdCtgy[] => {
+      return isEmptyObject(state.thirdCtgyList) ? storage.get('thirdctgylist') : state.thirdCtgyList
+    },
+    getSubThirdCtgyList: (state): ThirdCtgy[] => {
+      return isEmptyObject(state.subThirdCtgyList) ? storage.get('subthirdctgylist') : state.subThirdCtgyList
     },
   },
   actions: {
@@ -40,6 +43,14 @@ export const useCtgyStore = defineStore('ctgy-store', {
     storeSecondCtgy(secondCtgy: SecondCtgy) {
       storage.set('secondctgy', secondCtgy)
       this.secondCtgy = secondCtgy
+    },
+    storeThirdCtgyList(thirdCtgyList: ThirdCtgy[]) {
+      storage.set('thirdctgylist', thirdCtgyList)
+      this.thirdCtgyList = thirdCtgyList
+    },
+    storeSubThirdCtgyList(subThirdCtgyList: ThirdCtgy[]) {
+      storage.set('subthirdctgylist', subThirdCtgyList)
+      this.subThirdCtgyList = subThirdCtgyList
     },
     async findFirstCtgyList() {
       const ret = await ctgyAPI.getFirstCtgyList()

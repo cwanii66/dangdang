@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import FstToThrdCtgy from '../service'
+import FstToThrdCtgy, { ctgyStore } from '../service'
 import type { SecondCtgy, ThirdCtgy } from '@/pstore/ctgy/state'
 
 const props = defineProps<{
@@ -18,7 +18,7 @@ const spreadIconClass = ref<string>('icon-xiangxiajiantou')
 function switchSpread() {
   spreadSwitcher.value = spreadSwitcher.value === '展开' ? '收起' : '展开'
   spreadIconClass.value = spreadSwitcher.value === '展开' ? 'icon-xiangxiajiantou' : 'icon-xiangshangjiantou'
-  spreadFlag.value = !spreadFlag.value
+  ctgyStore.isSpreadCtgys = spreadFlag.value = !spreadFlag.value
 }
 
 function displayClass(index: number) {

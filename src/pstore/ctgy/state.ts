@@ -21,9 +21,21 @@ export interface ThirdCtgy {
 export interface CtgyState {
   firstCtgyList: FirstCtgy[]
   secondCtgyList: SecondCtgy[]
+  thirdCtgyList: ThirdCtgy[]
+  subThirdCtgyList: ThirdCtgy[]
+  firstCtgy: FirstCtgy
+  secondCtgy: SecondCtgy
+  thirdCtgy: ThirdCtgy
+  isSpreadCtgys: boolean
 }
 
 export const initialCtgyState: CtgyState = {
   firstCtgyList: [],
   secondCtgyList: [],
+  thirdCtgyList: [],
+  subThirdCtgyList: [],
+  firstCtgy: {} as FirstCtgy,
+  secondCtgy: {} as SecondCtgy,
+  thirdCtgy: {} as ThirdCtgy,
+  isSpreadCtgys: false,
 }

@@ -21,9 +21,6 @@ const routes: RouteRecordRaw[] = [
     name: 'books',
     path: '/books',
     component: books,
-    props: route => ({
-      thirdctgyId: route.query.thirdctgyId || '',
-    }),
   },
 ]
 

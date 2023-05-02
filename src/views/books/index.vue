@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import BookSearchBar from './components/BookSearchBar.vue'
 import BreadCrumb from './components/BreadCrumb.vue'
+import ThirdCtgy from './components/ThirdCtgy.vue'
 import getImg from '@/utils/imgUtil'
-
-defineProps<{
-  thirdctgyId: string
-}>()
 </script>
 
 <template>
@@ -15,6 +12,7 @@ defineProps<{
   </div>
   <div class="book-ctgy">
     <BreadCrumb />
+    <ThirdCtgy />
   </div>
 </template>
 
@@ -33,11 +31,11 @@ defineProps<{
     object-fit: contain;
   }
 }
+
 .book-ctgy {
   position: absolute;
   top: 2.7rem;
   width: 5.04rem;
   margin: 0.18rem;
-  background-color: aquamarine;
 }
 </style>

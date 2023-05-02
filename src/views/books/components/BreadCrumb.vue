@@ -16,7 +16,7 @@ const { getFirstCtgy, getSecondCtgy } = FstToThrdCtgy.ctgyStoreRefs
 .breadcrust {
   display: flex;
   align-items: center;
-  font-size: 0.23rem;
+  font-size: 0.2rem;
   padding: 0.12rem 0;
   gap: 0.1rem;
   font-weight: 400;
