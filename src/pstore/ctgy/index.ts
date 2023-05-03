@@ -11,6 +11,7 @@ function isEmptyObject(obj: object) {
 export const useCtgyStore = defineStore('ctgy-store', {
   state: () => ({
     ...initialCtgyState,
+    activeThirdCtgyIndex: 0,
   }),
   getters: {
     getFirstCtgyList: state => state.firstCtgyList,
