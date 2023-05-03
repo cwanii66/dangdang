@@ -56,6 +56,7 @@ function getThirdCtgyProps(secondctgy: SecondCtgy) {
   left: 0;
   bottom: 0.85rem;
   gap: 0.2rem;
+  font-size: 0.2rem;
 
   .firstctgy {
     width: 1.3rem;
