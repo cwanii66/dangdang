@@ -9,14 +9,6 @@ const activeThirdCtgyIndex = ref<number>(getThirdCtgy.value.thirdctgyId)
 const thirdCtgyList = computed(() => isSpreadCtgys.value ? getThirdCtgyList.value : getSubThirdCtgyList.value)
 const allEl = ref<HTMLDivElement | null>(null)
 
-const displayedThirdCtgyList = computed(() => {
-  const list = thirdCtgyList.value
-  const activeIndex = list.findIndex(thirdctgy => thirdctgy.thirdctgyId === activeThirdCtgyIndex.value)
-
-  if (activeIndex > 0)
-    moveToFirst(activeIndex)
-  return list
-})
 function setActiveThirdCtgy(idx: number) {
   if (idx === -1) {
     allEl.value?.classList.add('active-ctgy')
@@ -25,12 +17,7 @@ function setActiveThirdCtgy(idx: number) {
   else {
     allEl.value?.classList.remove('active-ctgy')
     activeThirdCtgyIndex.value = thirdCtgyList.value[idx].thirdctgyId
-    moveToFirst(idx)
   }
-}
-function moveToFirst(idx: number) {
-  const clickedElement = thirdCtgyList.value.splice(idx, 1)[0]
-  thirdCtgyList.value.unshift(clickedElement)
 }
 </script>
 
@@ -39,7 +26,7 @@ function moveToFirst(idx: number) {
     <div ref="allEl" class="thrdctgys" @click="setActiveThirdCtgy(-1)">
       <span class="thirdctgy-item">全部</span>
     </div>
-    <div v-for="thirdctgy, idx in displayedThirdCtgyList" :key="thirdctgy.thirdctgyId" class="thrdctgys"
+    <div v-for="thirdctgy, idx in thirdCtgyList" :key="thirdctgy.thirdctgyId" class="thrdctgys"
       :class="{ 'active-ctgy': activeThirdCtgyIndex === thirdctgy.thirdctgyId }" @click="setActiveThirdCtgy(idx)">
       <span class="thirdctgy-item">{{ thirdctgy.thirdname }}</span>
     </div>
