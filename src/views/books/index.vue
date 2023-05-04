@@ -2,6 +2,7 @@
 import BookSearchBar from './components/BookSearchBar.vue'
 import BreadCrumb from './components/BreadCrumb.vue'
 import ThirdCtgy from './components/ThirdCtgy.vue'
+import BookItem from './components/BookItem.vue'
 import getImg from '@/utils/imgUtil'
 </script>
 
@@ -13,6 +14,7 @@ import getImg from '@/utils/imgUtil'
   <div class="book-ctgy">
     <BreadCrumb />
     <ThirdCtgy />
+    <BookItem />
   </div>
 </template>
 

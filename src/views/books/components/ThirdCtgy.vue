@@ -44,7 +44,7 @@ function setActiveThirdCtgy(idx: number) {
 <style lang="scss" scoped>
 .content {
   position: relative;
-  margin-top: 0.2rem;
+  margin: 0.2rem 0;
   width: 5.04rem;
   overflow: hidden;
 
@@ -52,11 +52,11 @@ function setActiveThirdCtgy(idx: number) {
     float: left;
     font-size: 0.18rem;
     margin-right: 0.24rem;
-    height: 0.43rem;
+    height: 0.4rem;
 
     .thirdctgy-item {
       padding: 0 0.1rem;
-      line-height: 0.43rem;
+      line-height: 0.4rem;
       text-shadow: 0 0 0.01rem gray;
     }
   }
