@@ -15,22 +15,22 @@ fetchBookList()
       <div class="bookinfo">
         <div class="bookinfo-brief">
           <div class="book-name">
-            西游记后传
+           {{ bookItem.bookname }}
           </div>
           <div class="book-author-publs">
-            <span class="author spacing">章金莱</span>
+            <span class="author spacing">{{ bookItem.author }}</span>
             <span class="separator spacing">|</span>
-            <span class="publs spacing">出版社</span>
+            <span class="publs spacing">{{bookItem.publishername }}</span>
           </div>
         </div>
         <div class="bookinfo-other">
           <div class="price">
             <span class="discountprice spacing">
               <span class="symbol">&yen;</span>
-              89.34
+              {{ bookItem.originalprice }}
             </span>
-            <span class="originprice spacing">&yen;100</span>
-            <span class="discount">0.8折</span>
+            <span class="originprice spacing">&yen;{{ bookItem.originalprice }}</span>
+            <span class="discount">{{ bookItem.discount }}折</span>
           </div>
           <div class="give">
             <span class="self-support">自营</span>
@@ -38,7 +38,7 @@ fetchBookList()
             <span class="free-shipping">包邮</span>
           </div>
           <div class="monthsalescount">
-            <span>月售9878</span>
+            <span>月售{{ bookItem.monthsalecount }}</span>
           </div>
           <div class="ranklist">
             <span>图书畅销总排行榜第1名</span>
@@ -54,6 +54,7 @@ fetchBookList()
   display: grid;
   row-gap: 0.12rem;
 }
+
 .book-item {
   display: grid;
   grid-template-columns: 2.3rem 2.7rem;

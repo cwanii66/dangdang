@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import BookService from '../service'
 import FstToThrdCtgy from '@/views/ctgy/service'
 
-const { openOrCollapseInBook, setActiveThirdCtgyId } = FstToThrdCtgy
+const { openOrCollapseInBook } = FstToThrdCtgy
+const { setActiveThirdCtgyId } = BookService
 const { getThirdCtgyList, getSubThirdCtgyList, isSpreadCtgys, getThirdCtgy } = FstToThrdCtgy.ctgyStoreRefs
 
 const activeThirdCtgyId = ref<number>(getThirdCtgy.value.thirdctgyId)
