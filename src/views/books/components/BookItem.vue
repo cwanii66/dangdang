@@ -3,18 +3,20 @@ import BookService from '../service'
 import getImg from '@/utils/imgUtil'
 
 const { fetchBookList, bookStoreRefs } = BookService
-const { getBookList } = bookStoreRefs
+const { getBookListByThirdCtgyId } = bookStoreRefs
 
 fetchBookList()
 </script>
 
 <template>
   <main class="content">
-    <div class="book-item" v-for="bookItem in getBookList" :key="bookItem.publishid">
-      <img class="bookpic" :src="getImg('1童年.png')" alt="book image" />
+    <div v-for="bookItem in getBookListByThirdCtgyId" :key="bookItem.publishid" class="book-item">
+      <img class="bookpic" :src="getImg(bookItem.bookpicname)" alt="book image">
       <div class="bookinfo">
         <div class="bookinfo-brief">
-          <div class="book-name">西游记后传</div>
+          <div class="book-name">
+            西游记后传
+          </div>
           <div class="book-author-publs">
             <span class="author spacing">章金莱</span>
             <span class="separator spacing">|</span>

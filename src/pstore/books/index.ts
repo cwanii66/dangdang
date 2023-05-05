@@ -24,13 +24,17 @@ export const useBookStore = defineStore('book-store', {
     bookList: [],
   }),
   getters: {
-    getBookList: (state) => {
+    getBookListByThirdCtgyId: (state) => {
       return state.bookList
     },
   },
   actions: {
     async findBookList(thirdCtgyId: number) {
-      const ret = await BookAPI.getBookList(thirdCtgyId)
+      const ret = await BookAPI.getBookListByThirdCtgyId(thirdCtgyId)
+      this.bookList = ret.data
+    },
+    async findBookListBySecondCtgyId(secondCtgyId: number) {
+      const ret = await BookAPI.getAllBookList(secondCtgyId)
       this.bookList = ret.data
     },
   },

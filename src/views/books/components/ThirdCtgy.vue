@@ -17,8 +17,8 @@ function setActiveThirdCtgy(idx: number) {
   else {
     allEl.value?.classList.remove('active-ctgy')
     activeThirdCtgyId.value = thirdCtgyList.value[idx].thirdctgyId
-    setActiveThirdCtgyId(activeThirdCtgyId.value)
   }
+  setActiveThirdCtgyId(activeThirdCtgyId.value)
 }
 </script>
 

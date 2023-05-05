@@ -2,8 +2,12 @@ import request from '@/utils/axiosUtil'
 
 class BookAPI {
   static bookApi: BookAPI = new BookAPI()
-  getBookList(thirdCtgyId: number) {
+  getBookListByThirdCtgyId(thirdCtgyId: number) {
     return request.get(`/bookmodule/findBooksByThirdctgyId/${thirdCtgyId}`, false)
+  }
+
+  getAllBookList(secondCtgyId: number) {
+    return request.get(`/bookmodule/findAllBooksBySecondCtgyId/${secondCtgyId}`, false)
   }
 }
 

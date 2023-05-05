@@ -1,5 +1,5 @@
 import { storeToRefs } from 'pinia'
-import { ref, watchEffect } from 'vue'
+import { watchEffect } from 'vue'
 import { useBookStore } from '@/pstore/books'
 import FstToThrdCtgy from '@/views/ctgy/service'
 
@@ -10,9 +10,11 @@ class BookService {
   static bookStoreRefs = storeToRefs(bookStore)
 
   static async fetchBookList() {
-    const initialThirdCtgyId = ref<number>(ctgyStoreRefs.getThirdCtgy.value.thirdctgyId)
     watchEffect(async () => {
-      await bookStore.findBookList(initialThirdCtgyId.value)
+      if (ctgyStoreRefs.getActiveThirdCtgyId.value < 0)
+        await bookStore.findBookListBySecondCtgyId(ctgyStoreRefs.getThirdCtgy.value.secctgyid)
+      else
+        await bookStore.findBookList(ctgyStoreRefs.getActiveThirdCtgyId.value)
     })
   }
 }

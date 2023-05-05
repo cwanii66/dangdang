@@ -28,8 +28,8 @@ export const useCtgyStore = defineStore('ctgy-store', {
     getSubThirdCtgyList: (state): ThirdCtgy[] => {
       return isEmptyObject(state.subThirdCtgyList) ? storage.get('subthirdctgylist') : state.subThirdCtgyList
     },
-    getThirdCtgyId: (state): number => {
-      return state.activeThirdCtgyId
+    getActiveThirdCtgyId(state): number {
+      return state.activeThirdCtgyId === 0 ? this.getThirdCtgy.thirdctgyId : state.activeThirdCtgyId
     },
   },
   actions: {
