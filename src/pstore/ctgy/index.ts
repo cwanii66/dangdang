@@ -9,9 +9,7 @@ function isEmptyObject(obj: object) {
 }
 
 export const useCtgyStore = defineStore('ctgy-store', {
-  state: () => ({
-    ...initialCtgyState,
-  }),
+  state: () => initialCtgyState,
   getters: {
     getFirstCtgyList: state => state.firstCtgyList,
     getSecThrdCtgyList: state => state.secondCtgyList,
@@ -29,6 +27,9 @@ export const useCtgyStore = defineStore('ctgy-store', {
     },
     getSubThirdCtgyList: (state): ThirdCtgy[] => {
       return isEmptyObject(state.subThirdCtgyList) ? storage.get('subthirdctgylist') : state.subThirdCtgyList
+    },
+    getThirdCtgyId: (state): number => {
+      return state.activeThirdCtgyId
     },
   },
   actions: {

@@ -1,58 +1,69 @@
 <script setup lang="ts">
+import BookService from '../service'
 import getImg from '@/utils/imgUtil'
+
+const { fetchBookList, bookStoreRefs } = BookService
+const { getBookList } = bookStoreRefs
+
+fetchBookList()
 </script>
 
 <template>
-  <div class="book-item">
-    <img class="bookpic" :src="getImg('1童年')" alt="book image" />
-    <div class="bookinfo">
-      <div class="bookinfo-brief">
-        <div class="book-name">西游记后传</div>
-        <div class="book-author-publs">
-          <span class="author spacing">章金莱</span>
-          <span class="separator spacing">|</span>
-          <span class="publs spacing">出版社</span>
+  <main class="content">
+    <div class="book-item" v-for="bookItem in getBookList" :key="bookItem.publishid">
+      <img class="bookpic" :src="getImg('1童年.png')" alt="book image" />
+      <div class="bookinfo">
+        <div class="bookinfo-brief">
+          <div class="book-name">西游记后传</div>
+          <div class="book-author-publs">
+            <span class="author spacing">章金莱</span>
+            <span class="separator spacing">|</span>
+            <span class="publs spacing">出版社</span>
+          </div>
         </div>
-      </div>
-      <div class="bookinfo-other">
-        <div class="price">
-          <span class="discountprice spacing">
-            <span class="symbol">&yen;</span>
-            89.34
-          </span>
-          <span class="originprice spacing">&yen;100</span>
-          <span class="discount">0.8折</span>
-        </div>
-        <div class="give">
-          <span class="self-support">自营</span>
-          <span class="coupons">券</span>
-          <span class="free-shipping">包邮</span>
-        </div>
-        <div class="monthsalescount">
-          <span>月售9878</span>
-        </div>
-        <div class="ranklist">
-          <span>图书畅销总排行榜第1名</span>
+        <div class="bookinfo-other">
+          <div class="price">
+            <span class="discountprice spacing">
+              <span class="symbol">&yen;</span>
+              89.34
+            </span>
+            <span class="originprice spacing">&yen;100</span>
+            <span class="discount">0.8折</span>
+          </div>
+          <div class="give">
+            <span class="self-support">自营</span>
+            <span class="coupons">券</span>
+            <span class="free-shipping">包邮</span>
+          </div>
+          <div class="monthsalescount">
+            <span>月售9878</span>
+          </div>
+          <div class="ranklist">
+            <span>图书畅销总排行榜第1名</span>
+          </div>
         </div>
       </div>
     </div>
-    <!-- <div class="empty">库存所有书已经售光</div> -->
-  </div>
+  </main>
 </template>
 
 <style lang="scss" scoped>
+.content {
+  display: grid;
+  row-gap: 0.12rem;
+}
 .book-item {
   display: grid;
   grid-template-columns: 2.3rem 2.7rem;
   grid-auto-flow: row;
   justify-items: center;
   grid-auto-rows: min-content;
-  row-gap: 0.1rem;
   background-color: aquamarine;
 
   .bookpic {
     width: 1.8rem;
     height: 2.2rem;
+    align-self: center;
     object-fit: contain;
   }
 

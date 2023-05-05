@@ -30,6 +30,8 @@ const { getThirdCtgy } = ctgyStoreRefs
 
 .content {
   @extend .multiplex-content;
+  background-color: white;
+  z-index: 999;
   .search-bar {
     @extend .multiplex-search-bar;
     margin: 0 0.2rem;

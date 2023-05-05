@@ -27,6 +27,7 @@ export interface CtgyState {
   secondCtgy: SecondCtgy
   thirdCtgy: ThirdCtgy
   isSpreadCtgys: boolean
+  activeThirdCtgyId: number
 }
 
 export const initialCtgyState: CtgyState = {
@@ -38,4 +39,5 @@ export const initialCtgyState: CtgyState = {
   secondCtgy: {} as SecondCtgy,
   thirdCtgy: {} as ThirdCtgy,
   isSpreadCtgys: false,
+  activeThirdCtgyId: 0,
 }

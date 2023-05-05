@@ -2,21 +2,22 @@
 import { computed, ref } from 'vue'
 import FstToThrdCtgy from '@/views/ctgy/service'
 
-const { openOrCollapseInBook } = FstToThrdCtgy
+const { openOrCollapseInBook, setActiveThirdCtgyId } = FstToThrdCtgy
 const { getThirdCtgyList, getSubThirdCtgyList, isSpreadCtgys, getThirdCtgy } = FstToThrdCtgy.ctgyStoreRefs
 
-const activeThirdCtgyIndex = ref<number>(getThirdCtgy.value.thirdctgyId)
+const activeThirdCtgyId = ref<number>(getThirdCtgy.value.thirdctgyId)
 const thirdCtgyList = computed(() => isSpreadCtgys.value ? getThirdCtgyList.value : getSubThirdCtgyList.value)
 const allEl = ref<HTMLDivElement | null>(null)
 
 function setActiveThirdCtgy(idx: number) {
   if (idx === -1) {
     allEl.value?.classList.add('active-ctgy')
-    activeThirdCtgyIndex.value = -1
+    activeThirdCtgyId.value = -1
   }
   else {
     allEl.value?.classList.remove('active-ctgy')
-    activeThirdCtgyIndex.value = thirdCtgyList.value[idx].thirdctgyId
+    activeThirdCtgyId.value = thirdCtgyList.value[idx].thirdctgyId
+    setActiveThirdCtgyId(activeThirdCtgyId.value)
   }
 }
 </script>
@@ -27,7 +28,7 @@ function setActiveThirdCtgy(idx: number) {
       <span class="thirdctgy-item">全部</span>
     </div>
     <div v-for="thirdctgy, idx in thirdCtgyList" :key="thirdctgy.thirdctgyId" class="thrdctgys"
-      :class="{ 'active-ctgy': activeThirdCtgyIndex === thirdctgy.thirdctgyId }" @click="setActiveThirdCtgy(idx)">
+      :class="{ 'active-ctgy': activeThirdCtgyId === thirdctgy.thirdctgyId }" @click="setActiveThirdCtgy(idx)">
       <span class="thirdctgy-item">{{ thirdctgy.thirdname }}</span>
     </div>
     <div class="icon">

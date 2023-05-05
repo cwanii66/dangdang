@@ -9,7 +9,7 @@ import getImg from '@/utils/imgUtil'
 <template>
   <BookSearchBar />
   <div class="ad">
-    <img class="ad-img" :src="getImg('2')" />
+    <img class="ad-img" :src="getImg('2.png')" />
   </div>
   <div class="book-ctgy">
     <BreadCrumb />

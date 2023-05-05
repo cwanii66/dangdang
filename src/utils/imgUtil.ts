@@ -1,11 +1,10 @@
 import storage from 'store'
 
 export class ImgUtil {
-  static #imgList: Record<string, string> = {}
+  static #imgList: Record<string, string> = Object.create(null)
 
   static storeImgList() {
     const storeImgListFn = () => storage.set('imgList', ImgUtil.#imgList ?? {})
-
     if (!storage.get('imgList'))
       ImgUtil.#imgList = storeImgListFn()
 
@@ -31,7 +30,6 @@ export class ImgUtil {
       ap = imgMap[rp].default
       imgName = ap.slice(
         ap.lastIndexOf('/') + 1,
-        ap.lastIndexOf('.'),
       )
       ImgUtil.#imgList[imgName] = ap
     }
