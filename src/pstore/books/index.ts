@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import BookAPI from '@/api/BookAPI'
 
-interface BookInfo {
+export interface BookInfo {
   ISBN: string
   bookname: string
   author: string

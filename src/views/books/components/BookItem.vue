@@ -10,7 +10,7 @@ fetchBookList()
 
 <template>
   <main class="content">
-    <div v-for="bookItem in getBookListByThirdCtgyId" :key="bookItem.publishid" class="book-item">
+    <div v-for="bookItem in getBookListByThirdCtgyId" :key="bookItem.ISBN" class="book-item">
       <img class="bookpic" :src="getImg(bookItem.bookpicname)" alt="book image">
       <div class="bookinfo">
         <div class="bookinfo-brief">
@@ -52,6 +52,7 @@ fetchBookList()
 <style lang="scss" scoped>
 .content {
   display: grid;
+  margin-top: 0.18rem;
   row-gap: 0.12rem;
 }
 
@@ -61,7 +62,6 @@ fetchBookList()
   grid-auto-flow: row;
   justify-items: center;
   grid-auto-rows: min-content;
-  background-color: aquamarine;
 
   .bookpic {
     width: 1.8rem;
