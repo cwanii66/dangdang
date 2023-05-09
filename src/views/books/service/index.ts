@@ -14,7 +14,7 @@ export const bookStore = useBookStore()
 class BookService {
   static bookStoreRefs = storeToRefs(bookStore)
   static activeThirdCtgyId: Ref<number> = ref(ctgyStoreRefs.getThirdCtgy.value.thirdctgyId)
-  static sortField: Ref<string> = ref('')
+  static sortField: Ref<string> = ref('originalprice')
   static sortType: Ref<SortType> = ref('desc')
   static isDesc: Ref<boolean> = ref(true) // depends on sort type
 
@@ -23,7 +23,7 @@ class BookService {
       if (BookService.activeThirdCtgyId.value < 0)
         await bookStore.findBookListBySecondCtgyId(ctgyStoreRefs.getThirdCtgy.value.secctgyid)
       else
-        await bookStore.findBookList(BookService.activeThirdCtgyId.value)
+        await bookStore.findBookList(BookService.activeThirdCtgyId.value, BookService.sortField.value, BookService.sortType.value)
     })
   }
 
@@ -31,31 +31,16 @@ class BookService {
     BookService.activeThirdCtgyId.value = thirdCtgyId
   }
 
-  static sortBook(sortField: string) {
+  static sortBook(sortField: SortFieldType) {
     BookService.sortField.value = sortField
     BookService.toggleSortType()
-    switch (sortField) {
-      case 'price':
-        BookService.defaultSort('originalprice')
-        break
-      case 'monthsalecount':
-        BookService.defaultSort('monthsalecount')
-        break
-      default:
-        break
-    }
   }
 
   static toggleSortType() {
     BookService.sortType.value = BookService.sortType.value === 'desc' ? 'asc' : 'desc'
+    if (BookService.sortField.value !== 'originalprice')
+      return
     BookService.isDesc.value = BookService.sortType.value === 'desc'
-  }
-
-  static defaultSort(sortFieldType: SortFieldType) {
-    if (BookService.isDesc.value) // TODO: fix type error for sortFieldType
-      bookStore.bookList.sort((a, b) => <number>b[sortFieldType] - <number>a[sortFieldType])
-    else
-      bookStore.bookList.sort((a, b) => <number>a[sortFieldType] - <number>b[sortFieldType])
   }
 }
 

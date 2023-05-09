@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import storage from 'store'
 import BookAPI from '@/api/BookAPI'
 
 export interface BookInfo {
@@ -13,10 +14,15 @@ export interface BookInfo {
   thirdctgyId: number
   originalprice: number
   discount: number
+  discountprice: string | number // BUG: I'am not sure why this field returned from server is string type
 }
 
 export interface BookState {
   bookList: BookInfo[]
+}
+
+function toFixed(num: number | string, digit: number): string {
+  return Number(num).toFixed(digit)
 }
 
 export const useBookStore = defineStore('book-store', {
@@ -24,18 +30,23 @@ export const useBookStore = defineStore('book-store', {
     bookList: [],
   }),
   getters: {
-    getBookListByThirdCtgyId: (state) => {
-      return state.bookList
+    getBookListByThirdCtgyId: (state): BookInfo[] => {
+      return state.bookList.length > 0 ? state.bookList : storage.get('bookList')
     },
   },
   actions: {
-    async findBookList(thirdCtgyId: number) {
-      const ret = await BookAPI.getBookListByThirdCtgyId(thirdCtgyId)
-      this.bookList = ret.data
+    async findBookList(thirdCtgyId: number, sortField: string, sortType: string) {
+      const bookList = await BookAPI.getBookListByThirdCtgyId(thirdCtgyId, sortField, sortType)
+      bookList.data = bookList.data.map((book: BookInfo) => {
+        book.discountprice = toFixed(book.discountprice, 2)
+        return book
+      })
+      this.bookList = bookList.data
+      storage.set('bookList', bookList.data)
     },
     async findBookListBySecondCtgyId(secondCtgyId: number) {
-      const ret = await BookAPI.getAllBookList(secondCtgyId)
-      this.bookList = ret.data
+      const bookList = await BookAPI.getAllBookList(secondCtgyId)
+      this.bookList = bookList.data
     },
   },
 })

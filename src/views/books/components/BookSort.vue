@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import BookService from '../service'
 
-const { sortBook, isDesc } = BookService
+const { sortField, sortBook, isDesc } = BookService
 </script>
 
 <template>
   <ul class="book-sort">
     <li class="compsive"><span class="inner">综合</span></li>
-    <li @click="sortBook('monthsalecount')">
+    <li @click="sortBook('monthsalecount')" :class="{ selected: sortField === 'monthsalecount' }">
       销量
-      <span class="asc-desc">
-        <i v-show="isDesc" class="iconfont icon-zuoce-xiangxiaxiaojiantousvg"></i>
-        <i v-show="!isDesc" class="iconfont icon-zuoce-xiangshangxiaojiantou"></i>
-      </span>
     </li>
-    <li @click="sortBook('price')">
+    <li @click="sortBook('originalprice')" :class="{ selected: sortField === 'originalprice' }">
       价格
       <span class="asc-desc">
         <i v-show="isDesc" class="iconfont icon-zuoce-xiangxiaxiaojiantousvg"></i>
@@ -40,6 +36,9 @@ const { sortBook, isDesc } = BookService
     flex-grow: 1;
     display: flex;
     align-items: center;
+  }
+  .selected {
+    color: rgb(255, 33, 33);
   }
 }
 </style>

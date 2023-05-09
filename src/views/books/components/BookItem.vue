@@ -27,7 +27,7 @@ fetchBookList()
           <div class="price">
             <span class="discountprice spacing">
               <span class="symbol">&yen;</span>
-              {{ bookItem.originalprice }}
+              {{ bookItem.discountprice }}
             </span>
             <span class="originprice spacing">&yen;{{ bookItem.originalprice }}</span>
             <span class="discount">{{ bookItem.discount }}折</span>
