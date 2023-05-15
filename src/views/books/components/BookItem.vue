@@ -1,26 +1,27 @@
 <script setup lang="ts">
 import BookService from '../service'
+import ShopCartOperation from './ShopCartOperation.vue'
 import getImg from '@/utils/imgUtil'
 
 const { fetchBookList, bookStoreRefs } = BookService
-const { getBookListByThirdCtgyId } = bookStoreRefs
+const { getBookList } = bookStoreRefs
 
 fetchBookList()
 </script>
 
 <template>
   <main class="content">
-    <div v-for="bookItem in getBookListByThirdCtgyId" :key="bookItem.ISBN" class="book-item">
+    <div v-for="bookItem in getBookList" :key="bookItem.ISBN" class="book-item">
       <img class="bookpic" :src="getImg(bookItem.bookpicname)" alt="book image">
       <div class="bookinfo">
         <div class="bookinfo-brief">
           <div class="book-name">
-           {{ bookItem.bookname }}
+            {{ bookItem.bookname }}
           </div>
           <div class="book-author-publs">
             <span class="author spacing">{{ bookItem.author }}</span>
             <span class="separator spacing">|</span>
-            <span class="publs spacing">{{bookItem.publishername }}</span>
+            <span class="publs spacing">{{ bookItem.publishername }}</span>
           </div>
         </div>
         <div class="bookinfo-other">
@@ -44,6 +45,7 @@ fetchBookList()
             <span>图书畅销总排行榜第1名</span>
           </div>
         </div>
+        <ShopCartOperation :book-item="bookItem" />
       </div>
     </div>
   </main>

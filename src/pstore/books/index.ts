@@ -10,6 +10,7 @@ export interface BookInfo {
   publishername: string
   monthsalecount: number
   bookpicname: string
+  purchasenum: number
   secondctgyId: number
   thirdctgyId: number
   originalprice: number
@@ -30,7 +31,7 @@ export const useBookStore = defineStore('book-store', {
     bookList: [],
   }),
   getters: {
-    getBookListByThirdCtgyId: (state): BookInfo[] => {
+    getBookList: (state): BookInfo[] => {
       return state.bookList.length > 0 ? state.bookList : storage.get('bookList')
     },
   },

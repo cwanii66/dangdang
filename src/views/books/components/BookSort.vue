@@ -7,10 +7,10 @@ const { sortField, sortBook, isDesc } = BookService
 <template>
   <ul class="book-sort">
     <li class="compsive"><span class="inner">综合</span></li>
-    <li @click="sortBook('monthsalecount')" :class="{ selected: sortField === 'monthsalecount' }">
+    <li @click.self="sortBook('monthsalecount')" :class="{ selected: sortField === 'monthsalecount' }">
       销量
     </li>
-    <li @click="sortBook('originalprice')" :class="{ selected: sortField === 'originalprice' }">
+    <li @click.self="sortBook('originalprice')" :class="{ selected: sortField === 'originalprice' }">
       价格
       <span class="asc-desc">
         <i v-show="isDesc" class="iconfont icon-zuoce-xiangxiaxiaojiantousvg"></i>

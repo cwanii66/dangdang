@@ -61,10 +61,6 @@ class FirstToThirdCtgy {
   static openOrCollapseInBook(isSpreadCtgys: boolean) {
     ctgyStore.isSpreadCtgys = isSpreadCtgys
   }
-
-  static setActiveThirdCtgyId(thirdCtgyId: number) {
-    ctgyStore.activeThirdCtgyId = thirdCtgyId
-  }
 }
 
 export default FirstToThirdCtgy
