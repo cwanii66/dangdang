@@ -15,15 +15,15 @@ export interface BookInfo {
   thirdctgyId: number
   originalprice: number
   discount: number
-  discountprice: string | number // BUG: I'am not sure why this field returned from server is string type
+  discountprice: number
 }
 
 export interface BookState {
   bookList: BookInfo[]
 }
 
-function toFixed(num: number | string, digit: number): string {
-  return Number(num).toFixed(digit)
+function toFixed(num: number, digit: number) {
+  return Number(num.toFixed(digit))
 }
 
 export const useBookStore = defineStore('book-store', {

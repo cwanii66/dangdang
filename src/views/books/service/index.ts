@@ -46,11 +46,22 @@ class BookService {
     BookService.isDesc.value = BookService.sortType.value === 'desc'
   }
 
+  static updateBookNum(bookNum: number, bookisbn?: string) {
+    const bookList = bookStore.getBookList
+    for (let i = 0; i < bookList.length; i++) {
+      if (bookisbn && bookList[i].ISBN === bookisbn) {
+        bookList[i].purchasenum = bookNum
+        break
+      }
+      else {
+        bookList[i].purchasenum = bookNum // initialize purchasenum not added to shopcart
+      }
+    }
+  }
+
   static async udBkNumWithSCLstNum() {
     const bookList = bookStore.getBookList
-    bookList.forEach((book) => {
-      book.purchasenum = 0
-    })
+    BookService.updateBookNum(0)
     ShopCartService.udBkNumWithSCLstNum(bookList)
   }
 }

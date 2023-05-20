@@ -1,15 +1,18 @@
 <script setup lang="ts">
+import ShopCartService from '../service/shopcart'
 import type { BookInfo } from '@/pstore/books'
 
 defineProps<{
   bookItem: BookInfo
 }>()
+
+const { addBookToShopCart } = ShopCartService
 </script>
 
 <template>
   <div class="shopcart">
     <div v-if="!bookItem.purchasenum" class="addbtn">
-      <div class="addbtn-inner">添加到购物车</div>
+      <div class="addbtn-inner" @click="addBookToShopCart(bookItem)">添加到购物车</div>
     </div>
     <div v-else class="shopcart-operate">
       <span v-show="bookItem.purchasenum > 1" class="shopcart-operate-minus">

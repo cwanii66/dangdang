@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import storage from 'store'
 import shopCartAPI from '@/api/ShopCartAPI'
+import storage, { OPTIONS } from '@/utils/storageUtil'
 
 export interface ShopCartInfo {
   shopcartid?: number
-  bookisbn: string | number // I'am not sure why this field returned from server is string type
+  bookisbn: string
   bookname: string
   bookpicname: string
   bookprice: number
@@ -31,6 +31,11 @@ export const useShopCartStore = defineStore('shopcart-store', {
       const { data } = await shopCartAPI.getShopCartList(userid)
       storage.set('shopCartList', data)
       this.shopCartList = data
+    },
+    async addBookToShopCart(shopCart: ShopCartInfo) {
+      const { data: dbShopCart } = await shopCartAPI.addBookToShopCart(shopCart)
+      const shopCartList: ShopCartInfo[] = storage.set('shopCartList', dbShopCart, OPTIONS.ADDORAPPEND, 'shopcartid', dbShopCart.shopcartid)
+      this.shopCartList = shopCartList
     },
   },
 })
