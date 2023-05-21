@@ -6,7 +6,7 @@ defineProps<{
   bookItem: BookInfo
 }>()
 
-const { addBookToShopCart } = ShopCartService
+const { addBookToShopCart, updateShopCart, deleteShopCart } = ShopCartService
 </script>
 
 <template>
@@ -15,14 +15,14 @@ const { addBookToShopCart } = ShopCartService
       <div class="addbtn-inner" @click="addBookToShopCart(bookItem)">添加到购物车</div>
     </div>
     <div v-else class="shopcart-operate">
-      <span v-show="bookItem.purchasenum > 1" class="shopcart-operate-minus">
+      <span @click="updateShopCart(bookItem, $event)" v-show="bookItem.purchasenum > 1" class="shopcart-operate-minus">
         <span class="inner">-</span>
       </span>
-      <span v-show="bookItem.purchasenum === 1" class="shopcart-operate-del">
+      <span @click="deleteShopCart(bookItem)" v-show="bookItem.purchasenum === 1" class="shopcart-operate-del">
         <span class="inner"><i class="iconfont icon-shanchu" /></span>
       </span>
       <span class="purchasenum">{{ bookItem.purchasenum }}</span>
-      <span class="shopcart-operate-plus">
+      <span @click="updateShopCart(bookItem, $event)" class="shopcart-operate-plus">
         <span class="inner">+</span>
       </span>
     </div>

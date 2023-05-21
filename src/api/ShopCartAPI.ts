@@ -11,6 +11,14 @@ class ShopCartAPI {
   addBookToShopCart(shopCart: ShopCartInfo) {
     return request.post('/shopcartmodule/addBookToShopCart', false, shopCart)
   }
+
+  updateShopCart(shopCart: ShopCartInfo) {
+    return request.put('/shopcartmodule/updateShopCart', false, shopCart)
+  }
+
+  deleteShopCart(shopCartId: number) {
+    return request.delete(`/shopcartmodule/deleteShopCart/${shopCartId}`, false)
+  }
 }
 
 export default ShopCartAPI.shopCartAPI

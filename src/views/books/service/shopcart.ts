@@ -36,4 +36,49 @@ export default class ShopCartService {
     shopCartStore.addBookToShopCart(shopCart)
     BookService.updateBookNum(1, shopCart.bookisbn) // initial add
   }
+
+  static getExistShopCartId(bookItem: BookInfo) {
+    const shopCartList = shopCartStore.getShopCartList
+    for (let i = 0; i < shopCartList.length; i++) {
+      if (bookItem.ISBN === shopCartList[i].bookisbn)
+        return shopCartList[i].shopcartid
+    }
+  }
+
+  static async updateShopCart(bookItem: BookInfo, event: Event) {
+    const target = event.currentTarget as HTMLElement
+    const className = target.className
+    let purchasenum = 0
+    switch (className) {
+      case 'shopcart-operate-plus':
+        purchasenum = bookItem.purchasenum + 1
+        break
+      case 'shopcart-operate-minus':
+        purchasenum = bookItem.purchasenum - 1
+        break
+      default:
+        break
+    }
+
+    const shopCartId = ShopCartService.getExistShopCartId(bookItem)
+    const shopCart: ShopCartInfo = {
+      shopcartid: shopCartId,
+      userid: 1,
+      bookisbn: bookItem.ISBN,
+      bookname: bookItem.bookname,
+      bookpicname: bookItem.bookpicname,
+      bookprice: bookItem.discountprice,
+      purchasenum,
+      checked: false,
+    }
+
+    await shopCartStore.updateShopCart(shopCart)
+    BookService.updateBookNum(purchasenum, shopCart.bookisbn)
+  }
+
+  static async deleteShopCart(bookItem: BookInfo) {
+    const shopCartId = ShopCartService.getExistShopCartId(bookItem)!
+    await shopCartStore.deleteShopCart(shopCartId)
+    BookService.updateBookNum(0, bookItem.ISBN)
+  }
 }
