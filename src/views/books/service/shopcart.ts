@@ -1,8 +1,11 @@
 import { storeToRefs } from 'pinia'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import BookService from '.'
 import { useShopCartStore } from '@/pstore/shopcart'
 import type { BookInfo } from '@/pstore/books'
 import type { ShopCartInfo } from '@/pstore/shopcart'
+
+type MessageType = '' | 'success' | 'warning' | 'info' | 'error'
 
 const shopCartStore = useShopCartStore()
 
@@ -77,8 +80,37 @@ export default class ShopCartService {
   }
 
   static async deleteShopCart(bookItem: BookInfo) {
-    const shopCartId = ShopCartService.getExistShopCartId(bookItem)!
-    await shopCartStore.deleteShopCart(shopCartId)
-    BookService.updateBookNum(0, bookItem.ISBN)
+    ShopCartService.confirm(
+      `确定要删除《${bookItem.bookname}》吗？`,
+      '删除确认',
+      '确定',
+      '取消',
+      'warning',
+    )
+      .then(async () => {
+        const shopCartId = ShopCartService.getExistShopCartId(bookItem)!
+        await shopCartStore.deleteShopCart(shopCartId)
+        BookService.updateBookNum(0, bookItem.ISBN)
+        ElMessage.success('删除成功')
+      })
+      .catch((reason) => {
+        reason === 'cancel' && ElMessage.info('已取消删除')
+      })
+  }
+
+  static confirm(
+    message: string,
+    title: string,
+    confirmButtonText: string,
+    cancelButtonText: string,
+    type: MessageType,
+  ) {
+    return ElMessageBox.confirm(message, title, {
+      confirmButtonText,
+      cancelButtonText,
+      type,
+      distinguishCancelAndClose: true,
+      center: true,
+    })
   }
 }
