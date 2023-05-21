@@ -6,7 +6,7 @@ export function getValArrOfObj<T extends any[], K extends keyof ElOfArr<T>>(arr:
   return arr.map((item: ElOfArr<T>) => item[key])
 }
 
-export enum OPTIONS {
+export enum OPTION {
   ACCUMULATE = 0,
   ADDORAPPEND = 1,
   NONE = -1,
@@ -15,18 +15,17 @@ export enum OPTIONS {
 function isPlainObject(val: unknown): val is object {
   return Object.prototype.toString.call(val) === '[object Object]'
 }
-
 class Storage {
   static storage: Storage = new Storage()
 
   set(key: string, value: string): any
   set(key: string, value: object): any
   set(key: string, value: any[]): any
-  set(key: string, value: any[], options: OPTIONS): any
-  set(key: string, value: object, options: OPTIONS, propKey: string, propValue: any): any
-  set(key: string, value: any, options: OPTIONS = OPTIONS.NONE, propKey = '', propValue?: any) {
+  set(key: string, value: any[], option: OPTION): any
+  set(key: string, value: object, option: OPTION, propKey: string, propValue: any): any
+  set(key: string, value: any, option: OPTION = OPTION.NONE, propKey = '', propValue?: any) {
     const arr: any[] = storage.get(key, [])
-    if (isPlainObject(value) && options === OPTIONS.ADDORAPPEND) {
+    if (isPlainObject(value) && option === OPTION.ADDORAPPEND) {
       const keyValsOfObj = getValArrOfObj(arr, propKey)
       const index = keyValsOfObj.indexOf(propValue) // the index of propValue in keyArrOfObj is the same as the index of value in arr
       if (propKey && propValue) {
@@ -38,7 +37,7 @@ class Storage {
         return arr
       }
     }
-    else if (Array.isArray(value) && options === OPTIONS.ACCUMULATE) {
+    else if (Array.isArray(value) && option === OPTION.ACCUMULATE) {
       arr.push(...value)
       return arr
     }
@@ -46,10 +45,28 @@ class Storage {
     return value
   }
 
+  remove(key: string): any
+  remove(key: string, option: OPTION, propKey: string, propValue: any): any
+  remove(key: string, option: OPTION = OPTION.NONE, propKey = '', propValue?: any) {
+    if (option === OPTION.ADDORAPPEND) { // remove one and reset
+      const arr: any[] = storage.get(key, [])
+      const keyValsOfObj = getValArrOfObj(arr, propKey)
+      const index = keyValsOfObj.indexOf(propValue)
+      if (propKey && propValue) {
+        index !== -1 && arr.splice(index, 1)
+        storage.set(key, arr)
+        return arr
+      }
+    }
+    else {
+      storage.remove(key) // remove all
+    }
+  }
+
   get(key: string): any
-  get(key: string, options: OPTIONS): any
-  get(key: string, options: OPTIONS = OPTIONS.NONE): any {
-    if (options === OPTIONS.ACCUMULATE || options === OPTIONS.ADDORAPPEND)
+  get(key: string, option: OPTION): any
+  get(key: string, option: OPTION = OPTION.NONE): any {
+    if (option === OPTION.ACCUMULATE || option === OPTION.ADDORAPPEND)
       return storage.get(key, [])
     else return storage.get(key)
   }
