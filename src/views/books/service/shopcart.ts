@@ -1,5 +1,6 @@
 import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { computed } from 'vue'
 import BookService from '.'
 import { useShopCartStore } from '@/pstore/shopcart'
 import type { BookInfo } from '@/pstore/books'
@@ -8,6 +9,23 @@ import type { ShopCartInfo } from '@/pstore/shopcart'
 type MessageType = '' | 'success' | 'warning' | 'info' | 'error'
 
 const shopCartStore = useShopCartStore()
+
+function twoDecimalPlaces(num: number) {
+  let str = num.toString()
+  const decimalIndex = str.indexOf('.')
+  if (decimalIndex === -1) {
+    str += '.00'
+  }
+  else {
+    const decimalPlaces = str.length - decimalIndex - 1
+    if (decimalPlaces === 1)
+      str += '0'
+
+    else if (decimalPlaces > 2)
+      str = num.toFixed(2)
+  }
+  return str as any as number
+}
 
 export default class ShopCartService {
   static shopCartStoreRefs = storeToRefs(shopCartStore)
@@ -26,7 +44,39 @@ export default class ShopCartService {
     })
   }
 
-  static addBookToShopCart(bookItem: BookInfo) {
+  private static calcTotalPrice() {
+    return computed(() => {
+      let _totalPrice = 0
+      const shopCartList = shopCartStore.getShopCartList
+      if (shopCartList && shopCartList.length > 0) {
+        shopCartList.forEach((shopCartItem) => {
+          _totalPrice += shopCartItem.bookprice * shopCartItem.purchasenum
+        })
+      }
+      return twoDecimalPlaces(_totalPrice)
+    })
+  }
+
+  private static calcTotalNum() {
+    return computed(() => {
+      let _totalNum = 0
+      const shopCartList = shopCartStore.getShopCartList
+      if (shopCartList && shopCartList.length > 0) {
+        shopCartList.forEach((shopCartItem) => {
+          _totalNum += shopCartItem.purchasenum
+        })
+      }
+      return _totalNum
+    })
+  }
+
+  static refreshShopCartInfo() {
+    const totalBookNum = this.calcTotalNum()
+    const totalBookPrice = this.calcTotalPrice()
+    return [totalBookNum, totalBookPrice] as const
+  }
+
+  static async addBookToShopCart(bookItem: BookInfo) {
     const shopCart: ShopCartInfo = {
       userid: 1,
       bookisbn: bookItem.ISBN,
@@ -36,7 +86,7 @@ export default class ShopCartService {
       purchasenum: 1,
       checked: false,
     }
-    shopCartStore.addBookToShopCart(shopCart)
+    await shopCartStore.addBookToShopCart(shopCart)
     BookService.updateBookNum(1, shopCart.bookisbn) // initial add
   }
 
@@ -74,7 +124,6 @@ export default class ShopCartService {
       purchasenum,
       checked: false,
     }
-
     await shopCartStore.updateShopCart(shopCart)
     BookService.updateBookNum(purchasenum, shopCart.bookisbn)
   }

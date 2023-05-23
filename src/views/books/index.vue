@@ -4,20 +4,24 @@ import BreadCrumb from './components/BreadCrumb.vue'
 import ThirdCtgy from './components/ThirdCtgy.vue'
 import BookItem from './components/BookItem.vue'
 import BookSort from './components/BookSort.vue'
+import ShopCart from './components/ShopCart.vue'
 import getImg from '@/utils/imgUtil'
 </script>
 
 <template>
   <BookSearchBar />
-  <div class="ad">
+  <aside class="ad">
     <img class="ad-img" :src="getImg('2.png')" />
-  </div>
-  <div class="book-ctgy">
+  </aside>
+  <main class="book-ctgy">
     <BreadCrumb />
     <ThirdCtgy />
     <BookSort />
     <BookItem />
-  </div>
+  </main>
+  <footer>
+    <ShopCart />
+  </footer>
 </template>
 
 <style lang="scss" scoped>

@@ -1,4 +1,5 @@
 import storage from 'store'
+import { isPlainObject } from '@/utils/generalUtil'
 
 type ElOfArr<T extends unknown[]> = T extends (infer U)[] ? U : never
 
@@ -12,9 +13,6 @@ export enum OPTION {
   NONE = -1,
 }
 
-function isPlainObject(val: unknown): val is object {
-  return Object.prototype.toString.call(val) === '[object Object]'
-}
 class Storage {
   static storage: Storage = new Storage()
 

@@ -53,7 +53,7 @@ class BookService {
         bookList[i].purchasenum = bookNum
         break
       }
-      else {
+      else if (!bookisbn) {
         bookList[i].purchasenum = bookNum // initialize purchasenum not added to shopcart
       }
     }
