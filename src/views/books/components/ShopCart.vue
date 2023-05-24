@@ -2,6 +2,7 @@
 import ShopCartService from '../service/shopcart'
 
 const [totalBookNum, totalBookPrice] = ShopCartService.refreshShopCartInfo()
+const { ball, onBeforeEnter, onEnter, onAfterEnter } = ShopCartService
 </script>
 
 <template>
@@ -9,7 +10,7 @@ const [totalBookNum, totalBookPrice] = ShopCartService.refreshShopCartInfo()
     <div class="content">
       <div class="content-left">
         <i class="iconfont icon-gouwuche" :class="{ highlight: totalBookNum > 0 }" />
-        <div class="purchasenum" v-show="totalBookNum > 0">
+        <div v-show="totalBookNum > 0" class="purchasenum">
           {{ totalBookNum }}
         </div>
       </div>
@@ -21,6 +22,18 @@ const [totalBookNum, totalBookPrice] = ShopCartService.refreshShopCartInfo()
           <span>去结算</span>
           <i class="iconfont icon-xiangyoujiantou" />
         </div>
+      </div>
+      <div class="ball-container">
+        <transition
+          name="ball"
+          @before-enter="onBeforeEnter"
+          @enter="onEnter"
+          @after-enter="onAfterEnter"
+        >
+          <div v-show="!ball.isHidden" class="shopcart-ball">
+            <div class="inner" />
+          </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -82,6 +95,21 @@ const [totalBookNum, totalBookPrice] = ShopCartService.refreshShopCartInfo()
         font-size: 0.21rem;
         .icon-xiangyoujiantou {
           font-size: 0.24rem;
+        }
+      }
+    }
+    .ball-container {
+      .shopcart-ball {
+        position: fixed;
+        left: 0.32rem;
+        bottom: 0.3rem;
+        transition: transform 0.5s cubic-bezier(0.48, -0.35, 0.78, 0.45);
+        .inner {
+          width: 0.16rem;
+          height: 0.16rem;
+          border-radius: 50%;
+          background-color: #1985f1;
+          transition: transform 0.5s ease-in-out;
         }
       }
     }

@@ -1,12 +1,16 @@
 import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { computed } from 'vue'
+import { computed, shallowReactive } from 'vue'
 import BookService from '.'
 import { useShopCartStore } from '@/pstore/shopcart'
 import type { BookInfo } from '@/pstore/books'
 import type { ShopCartInfo } from '@/pstore/shopcart'
 
 type MessageType = '' | 'success' | 'warning' | 'info' | 'error'
+interface Ball {
+  isHidden: boolean
+  addBtnTarget?: EventTarget | null
+}
 
 const shopCartStore = useShopCartStore()
 
@@ -29,6 +33,7 @@ function twoDecimalPlaces(num: number) {
 
 export default class ShopCartService {
   static shopCartStoreRefs = storeToRefs(shopCartStore)
+  static ball = shallowReactive<Ball>({ isHidden: true })
 
   static async findShopCartList() {
     await shopCartStore.findShopCartList(1)
@@ -105,6 +110,7 @@ export default class ShopCartService {
     switch (className) {
       case 'shopcart-operate-plus':
         purchasenum = bookItem.purchasenum + 1
+        ShopCartService.moveBall(target)
         break
       case 'shopcart-operate-minus':
         purchasenum = bookItem.purchasenum - 1
@@ -161,5 +167,41 @@ export default class ShopCartService {
       distinguishCancelAndClose: true,
       center: true,
     })
+  }
+
+  private static moveBall(eventTarget: EventTarget) {
+    // eslint-disable-next-line no-console
+    console.log('moveBall')
+    ShopCartService.ball.isHidden = false
+    ShopCartService.ball.addBtnTarget = eventTarget
+  }
+
+  static onBeforeEnter(el: Element) {
+    const addBtnTarget = ShopCartService.ball.addBtnTarget as HTMLElement
+    const addBtnRect = addBtnTarget.getBoundingClientRect()
+    const ballPos = {
+      x: addBtnRect.left - 12,
+      y: -(window.innerHeight - addBtnRect.top - 45),
+    }
+    const ball = el as HTMLElement
+    ball.style.transform = `translate3d(0, ${ballPos.y}px, 0)`
+    const inner = ball.querySelector('.inner') as HTMLElement
+    inner.style.transform = `translate3d(${ballPos.x}px, 0, 0)`
+  }
+
+  static onEnter(el: Element, done: () => void) {
+    // force repaint
+    void document.body.offsetHeight
+
+    const ball = el as HTMLElement
+    ball.style.transform = 'translate3d(0, 0, 0)'
+    const inner = ball.querySelector('.inner') as HTMLElement
+    inner.style.transform = 'translate3d(0, 0, 0)'
+    done()
+  }
+
+  static onAfterEnter() {
+    ShopCartService.ball.isHidden = true
+    ShopCartService.ball.addBtnTarget = null
   }
 }
