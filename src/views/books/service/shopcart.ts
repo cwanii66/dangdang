@@ -170,8 +170,6 @@ export default class ShopCartService {
   }
 
   private static moveBall(eventTarget: EventTarget) {
-    // eslint-disable-next-line no-console
-    console.log('moveBall')
     ShopCartService.ball.isHidden = false
     ShopCartService.ball.addBtnTarget = eventTarget
   }
@@ -191,13 +189,14 @@ export default class ShopCartService {
 
   static onEnter(el: Element, done: () => void) {
     // force repaint
-    void document.body.offsetHeight
-
-    const ball = el as HTMLElement
-    ball.style.transform = 'translate3d(0, 0, 0)'
-    const inner = ball.querySelector('.inner') as HTMLElement
-    inner.style.transform = 'translate3d(0, 0, 0)'
-    done()
+    // void document.body.offsetHeight
+    requestAnimationFrame(() => {
+      const ball = el as HTMLElement
+      ball.style.transform = 'translate3d(0, 0, 0)'
+      const inner = ball.querySelector('.inner') as HTMLElement
+      inner.style.transform = 'translate3d(0, 0, 0)'
+      done()
+    })
   }
 
   static onAfterEnter() {
