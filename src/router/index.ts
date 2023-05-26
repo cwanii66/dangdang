@@ -5,6 +5,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const ctgy = () => import('@/views/ctgy/index.vue')
 const books = () => import('@/views/books/index.vue')
+const shopcarts = () => import('@/views/shopcarts/ShopCarts.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -21,6 +22,11 @@ const routes: RouteRecordRaw[] = [
     name: 'books',
     path: '/books',
     component: books,
+  },
+  {
+    name: 'shopcarts',
+    path: '/shopcarts',
+    component: shopcarts,
   },
 ]
 

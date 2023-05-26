@@ -2,7 +2,7 @@
 import ShopCartService from '../service/shopcart'
 
 const [totalBookNum, totalBookPrice] = ShopCartService.refreshShopCartInfo()
-const { ball, onBeforeEnter, onEnter, onAfterEnter } = ShopCartService
+const { ball, onBeforeEnter, onEnter, onAfterEnter, toShopCarts } = ShopCartService
 </script>
 
 <template>
@@ -18,7 +18,7 @@ const { ball, onBeforeEnter, onEnter, onAfterEnter } = ShopCartService
         <div class="totalprice">
           &yen;{{ totalBookPrice }}
         </div>
-        <div class="settlement">
+        <div @click="toShopCarts" class="settlement">
           <span>去结算</span>
           <i class="iconfont icon-xiangyoujiantou" />
         </div>

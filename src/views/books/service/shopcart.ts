@@ -5,6 +5,7 @@ import BookService from '.'
 import { useShopCartStore } from '@/pstore/shopcart'
 import type { BookInfo } from '@/pstore/books'
 import type { ShopCartInfo } from '@/pstore/shopcart'
+import router from '@/router'
 
 type MessageType = '' | 'success' | 'warning' | 'info' | 'error'
 interface Ball {
@@ -151,6 +152,10 @@ export default class ShopCartService {
       .catch((reason) => {
         reason === 'cancel' && ElMessage.info('已取消删除')
       })
+  }
+
+  static toShopCarts() {
+    router.push({ name: 'shopcarts' })
   }
 
   static confirm(
