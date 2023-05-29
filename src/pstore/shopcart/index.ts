@@ -20,6 +20,7 @@ export interface ShopCartState {
 
 function storeShopCart(response: AxiosResponse<ShopCartInfo>) {
   const dbShopCart = response.data
+  dbShopCart.checked = true // every time update shopcart, set checked to true
   const shopCartList: ShopCartInfo[] = storage.set('shopCartList', dbShopCart, OPTION.ADDORAPPEND, 'shopcartid', dbShopCart.shopcartid)
   return shopCartList
 }
@@ -34,6 +35,11 @@ export const useShopCartStore = defineStore('shopcart-store', {
     },
   },
   actions: {
+    storeShopCartList(shopCartList: ShopCartInfo[]) {
+      this.shopCartList = shopCartList
+      storage.set('shopCartList', shopCartList)
+    },
+
     async findShopCartList(userid: number) {
       const { data } = await shopCartAPI.getShopCartList(userid)
       storage.set('shopCartList', data)

@@ -8,7 +8,7 @@ const { ball, onBeforeEnter, onEnter, onAfterEnter, toShopCarts } = ShopCartServ
 <template>
   <div class="shopcart">
     <div class="content">
-      <div class="content-left">
+      <div class="content-left" @click="toShopCarts">
         <i class="iconfont icon-gouwuche" :class="{ highlight: totalBookNum > 0 }" />
         <div v-show="totalBookNum > 0" class="purchasenum">
           {{ totalBookNum }}
@@ -109,7 +109,7 @@ const { ball, onBeforeEnter, onEnter, onAfterEnter, toShopCarts } = ShopCartServ
           height: 0.16rem;
           border-radius: 50%;
           background-color: #1985f1;
-          transition: transform 0.5s ease-in-out;
+          transition: transform 0.5s ease-out;
         }
       }
     }

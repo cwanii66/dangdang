@@ -1,76 +1,55 @@
 <script setup lang="ts">
+import ShopCartService from '../books/service/shopcart'
+import ShopCartOperation from '../books/components/ShopCartOperation.vue'
+import EmptyShopCart from './EmptyShopCart.vue'
 import getImg from '@/utils/imgUtil'
+
+const { getShopCartList } = ShopCartService.shopCartStoreRefs
+const [totalBookNum, totalBookPrice] = ShopCartService.refreshShopCartInfo()
+const { isSelectAll, back, selectAll, checkEvery } = ShopCartService
+checkEvery()
 </script>
 
 <template>
   <div class="shopcarts">
     <header class="header">
-      <i class="iconfont icon-xiangzuojiantou back-arrow" />
-      <input type="checkbox" class="check">
+      <i @click="back" class="iconfont icon-xiangzuojiantou back-arrow" />
+      <input type="checkbox" class="check" v-model="isSelectAll" @change="selectAll">
       <span class="label">当当网</span>
     </header>
-    <main class="items">
+    <div v-for="shopCart in getShopCartList" :key="shopCart.shopcartid" class="items">
       <div class="item">
         <div class="content">
-          <input type="checkbox" class="check">
+          <input type="checkbox" class="check" v-model="shopCart.checked" @change="checkEvery">
           <div class="pic">
-            <img :src="getImg('1童年.png')" class="pic-image">
+            <img :src="getImg(shopCart.bookpicname)" class="pic-image">
           </div>
           <div class="description">
             <div class="book-title">
-              童年
+              {{ shopCart.bookname }}
             </div>
             <div class="price">
-              <span class="curprice">&yen;89.93</span>
-              <span>添加删除购物车组件</span>
+              <span class="curprice">&yen;{{ shopCart.bookprice }}</span>
+              <span class="shopcart-operate">
+                <ShopCartOperation :shop-cart="shopCart" />
+              </span>
             </div>
           </div>
         </div>
       </div>
-      <div class="item">
-        <div class="content">
-          <input type="checkbox" class="check">
-          <div class="pic">
-            <img :src="getImg('1童年.png')" class="pic-image">
-          </div>
-          <div class="description">
-            <div class="book-title">
-              童年
-            </div>
-            <div class="price">
-              <span class="curprice">&yen;89.93</span>
-              <span>添加删除购物车组件</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="item">
-        <div class="content">
-          <input type="checkbox" class="check">
-          <div class="pic">
-            <img :src="getImg('1童年.png')" class="pic-image">
-          </div>
-          <div class="description">
-            <div class="book-title">
-              童年
-            </div>
-            <div class="price">
-              <span class="curprice">&yen;89.93</span>
-              <span>添加删除购物车组件</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
+    </div>
+    <div v-if="getShopCartList.length === 0">
+      <EmptyShopCart />
+    </div>
     <div class="cal">
       <span class="checkall">
-        <input type="checkbox" class="check">
+        <input type="checkbox" class="check" v-model="isSelectAll" @change="selectAll">
         <span class="label">全选</span>
         <span class="total">
-          合计: <span class="money">&yen;989.93</span>
+          合计: <span class="money">&yen;{{ totalBookPrice }}</span>
         </span>
       </span>
-      <span class="settlement">去结算3232.32</span>
+      <span class="settlement">去结算({{ totalBookNum }})</span>
     </div>
   </div>
 </template>
@@ -104,7 +83,6 @@ import getImg from '@/utils/imgUtil'
     grid-auto-rows: 2.89rem;
     align-items: center;
     row-gap: 0.2rem;
-    padding: 0.2rem 0;
     position: relative;
     width: 5.14rem;
     top: 0.86rem;
@@ -136,15 +114,14 @@ import getImg from '@/utils/imgUtil'
         flex-direction: column;
         .book-title {
           height: 0.8rem;
-          line-height: 0.8rem;
           color: #272727;
           font-size: 0.2rem;
         }
         .price {
           display: flex;
+          align-items: center;
           width: 100%;
           height: 1rem;
-          line-height: 1rem;
           font-size: 0.2rem;
           color: #ea5430;
           .curprice {

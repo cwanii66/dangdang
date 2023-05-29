@@ -1,7 +1,7 @@
 import { storeToRefs } from 'pinia'
 import { ref, watchEffect } from 'vue'
 import type { Ref } from 'vue'
-import ShopCartService from './shopcart'
+import ShopCartService, { shopCartStore } from './shopcart'
 import { useBookStore } from '@/pstore/books'
 import type { BookInfo } from '@/pstore/books'
 import FstToThrdCtgy from '@/views/ctgy/service'
@@ -25,7 +25,11 @@ class BookService {
         await bookStore.findBookListBySecondCtgyId(ctgyStoreRefs.getThirdCtgy.value.secctgyid)
       else
         await bookStore.findBookList(BookService.activeThirdCtgyId.value, BookService.sortField.value, BookService.sortType.value)
-      await ShopCartService.findShopCartList()
+
+      const shopCartList = shopCartStore.getShopCartList
+      if (!shopCartList || shopCartList.length === 0)
+        await ShopCartService.findShopCartList()
+
       await BookService.udBkNumWithSCLstNum()
     })
   }

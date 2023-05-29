@@ -1,6 +1,6 @@
 import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { computed, shallowReactive } from 'vue'
+import { computed, ref, shallowReactive } from 'vue'
 import BookService from '.'
 import { useShopCartStore } from '@/pstore/shopcart'
 import type { BookInfo } from '@/pstore/books'
@@ -13,7 +13,7 @@ interface Ball {
   addBtnTarget?: EventTarget | null
 }
 
-const shopCartStore = useShopCartStore()
+export const shopCartStore = useShopCartStore()
 
 function twoDecimalPlaces(num: number) {
   let str = num.toString()
@@ -35,6 +35,7 @@ function twoDecimalPlaces(num: number) {
 export default class ShopCartService {
   static shopCartStoreRefs = storeToRefs(shopCartStore)
   static ball = shallowReactive<Ball>({ isHidden: true })
+  static isSelectAll = ref<boolean>(false)
 
   static async findShopCartList() {
     await shopCartStore.findShopCartList(1)
@@ -56,7 +57,8 @@ export default class ShopCartService {
       const shopCartList = shopCartStore.getShopCartList
       if (shopCartList && shopCartList.length > 0) {
         shopCartList.forEach((shopCartItem) => {
-          _totalPrice += shopCartItem.bookprice * shopCartItem.purchasenum
+          if (shopCartItem.checked)
+            _totalPrice += shopCartItem.bookprice * shopCartItem.purchasenum
         })
       }
       return twoDecimalPlaces(_totalPrice)
@@ -69,7 +71,8 @@ export default class ShopCartService {
       const shopCartList = shopCartStore.getShopCartList
       if (shopCartList && shopCartList.length > 0) {
         shopCartList.forEach((shopCartItem) => {
-          _totalNum += shopCartItem.purchasenum
+          if (shopCartItem.checked)
+            _totalNum += shopCartItem.purchasenum
         })
       }
       return _totalNum
@@ -104,7 +107,7 @@ export default class ShopCartService {
     }
   }
 
-  static async updateShopCart(bookItem: BookInfo, event: Event) {
+  static async updateFromShopCart(bookItem: BookInfo, event: Event) {
     const target = event.currentTarget as HTMLElement
     const className = target.className
     let purchasenum = 0
@@ -135,7 +138,24 @@ export default class ShopCartService {
     BookService.updateBookNum(purchasenum, shopCart.bookisbn)
   }
 
-  static async deleteShopCart(bookItem: BookInfo) {
+  static async updateInShopCart(shopCart: ShopCartInfo, event: Event) {
+    const target = event.currentTarget as HTMLElement
+    const className = target.className
+    switch (className) {
+      case 'shopcart-operate-plus':
+        shopCart.purchasenum += 1
+        break
+      case 'shopcart-operate-minus':
+        shopCart.purchasenum -= 1
+        break
+      default:
+        break
+    }
+
+    await shopCartStore.updateShopCart(shopCart)
+  }
+
+  static async deleteFromShopCart(bookItem: BookInfo) {
     ShopCartService.confirm(
       `确定要删除《${bookItem.bookname}》吗？`,
       '删除确认',
@@ -154,8 +174,29 @@ export default class ShopCartService {
       })
   }
 
+  static async deleteInShopCart(shopCart: ShopCartInfo) {
+    ShopCartService.confirm(
+      `确定要删除《${shopCart.bookname}》吗？`,
+      '删除确认',
+      '确定',
+      '取消',
+      'warning',
+    )
+      .then(async () => {
+        await shopCartStore.deleteShopCart(shopCart.shopcartid!)
+        ElMessage.success('删除成功')
+      })
+      .catch((reason) => {
+        reason === 'cancel' && ElMessage.info('已取消删除')
+      })
+  }
+
   static toShopCarts() {
     router.push({ name: 'shopcarts' })
+  }
+
+  static back() {
+    router.back()
   }
 
   static confirm(
@@ -207,5 +248,20 @@ export default class ShopCartService {
   static onAfterEnter() {
     ShopCartService.ball.isHidden = true
     ShopCartService.ball.addBtnTarget = null
+  }
+
+  static selectAll() {
+    const shopCartList = shopCartStore.getShopCartList.map((shopCartItem) => {
+      shopCartItem.checked = ShopCartService.isSelectAll.value
+      return shopCartItem
+    })
+    shopCartStore.storeShopCartList(shopCartList) // update checked shopcart
+  }
+
+  static checkEvery() {
+    const shopCartList = shopCartStore.getShopCartList
+    const isEveryChecked = shopCartList.every(shopCartItem => shopCartItem.checked)
+    shopCartStore.storeShopCartList(shopCartList)
+    ShopCartService.isSelectAll.value = isEveryChecked
   }
 }
