@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FstToThrdCtgy from '@/views/ctgy/service'
 
-const { ctgyStoreRefs, back } = FstToThrdCtgy
+const { ctgyStoreRefs, back, toSearch } = FstToThrdCtgy
 const { getThirdCtgy } = ctgyStoreRefs
 </script>
 
@@ -9,15 +9,15 @@ const { getThirdCtgy } = ctgyStoreRefs
   <div class="content">
     <span @click="back"><i class="iconfont icon-xiangzuojiantou" /></span>
     <div class="search-bar">
-      <i class="iconfont icon-fangdajing"></i>
+      <i class="iconfont icon-fangdajing" />
       <div class="search-keyword">
         <div class="input-keyword">
           <span class="keyword"> {{ getThirdCtgy.thirdname }} </span>
-          <i class="iconfont icon-close"></i>
+          <i class="iconfont icon-close" />
         </div>
         <div class="input-bar">
-          <input type="text" class="search-keyword-input" placeholder="" />
-          <i class="iconfont icon-iconfontscan"></i>
+          <input type="text" class="search-keyword-input" @click="toSearch">
+          <i class="iconfont icon-iconfontscan" />
         </div>
       </div>
     </div>

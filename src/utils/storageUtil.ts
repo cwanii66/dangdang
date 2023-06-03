@@ -1,5 +1,5 @@
 import storage from 'store'
-import { isPlainObject } from '@/utils/generalUtil'
+import { isPlainObject, isString } from '@/utils/generalUtil'
 
 type ElOfArr<T extends unknown[]> = T extends (infer U)[] ? U : never
 
@@ -20,6 +20,7 @@ class Storage {
   set(key: string, value: object): any
   set(key: string, value: any[]): any
   set(key: string, value: any[], option: OPTION): any
+  set(key: string, value: string, option: OPTION): any
   set(key: string, value: object, option: OPTION, propKey: string, propValue: any): any
   set(key: string, value: any, option: OPTION = OPTION.NONE, propKey = '', propValue?: any) {
     const arr: any[] = storage.get(key, [])
@@ -35,8 +36,11 @@ class Storage {
         return arr
       }
     }
-    else if (Array.isArray(value) && option === OPTION.ACCUMULATE) {
-      arr.push(...value)
+    else if (option === OPTION.ACCUMULATE) {
+      Array.isArray(value) && arr.push(...value)
+      if (isString(value) && !arr.includes(value))
+        arr.push(value)
+      storage.set(key, arr)
       return arr
     }
     storage.set(key, value)

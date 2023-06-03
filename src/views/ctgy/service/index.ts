@@ -47,6 +47,12 @@ class FirstToThirdCtgy {
     })
   }
 
+  static toSearch() {
+    router.push({
+      name: 'search',
+    })
+  }
+
   static storeCtgysWhenNavigate(thirdCtgy: ThirdCtgy, secondCtgy: SecondCtgy) {
     ctgyStore.storeThirdCtgy(thirdCtgy)
     ctgyStore.storeSecondCtgy(secondCtgy)
