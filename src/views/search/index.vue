@@ -4,9 +4,20 @@ import EmptySearch from './EmptySearch.vue'
 import SearchService from './service'
 import router from '@/router'
 
-const { isAutoComplete, searchStoreRefs, watchFocusAndInput, addOrUpdateSearchHistory, toggleAutoComplete } = SearchService
-const { keyword, getSearchKeywords, getHistoryKeywords } = searchStoreRefs
+const {
+  isAutoComplete,
+  searchStoreRefs,
+  watchFocusAndInput,
+  addOrUpdateSearchHistory,
+  toggleAutoComplete,
+  storeHistoryKeywords,
+  storeHistoryKeywordsDesc,
+} = SearchService
+const { keyword, getSearchKeywords, getHistoryKeywords, getHistoryKeywordsDesc } = searchStoreRefs
 const searchInputRef = ref<HTMLInputElement | null>(null)
+
+storeHistoryKeywords()
+storeHistoryKeywordsDesc()
 
 watchFocusAndInput(searchInputRef)
 </script>
@@ -45,6 +56,17 @@ watchFocusAndInput(searchInputRef)
       </div>
       <div class="search-history-list">
         <div v-for="historyKeyword, idx in getHistoryKeywords" :key="idx" class="search-history-item">
+          <span>{{ historyKeyword }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="search-history frequency">
+      <div class="search-history-title">
+        <span class="history-text">搜索发现</span>
+        <i class="iconfont icon-shanchu del" />
+      </div>
+      <div class="search-history-list">
+        <div v-for="historyKeyword, idx in getHistoryKeywordsDesc" :key="idx" class="search-history-item">
           <span>{{ historyKeyword }}</span>
         </div>
       </div>
@@ -118,8 +140,8 @@ watchFocusAndInput(searchInputRef)
     background-color: white;
     .complete-item {
       display: flex;
-      height: 0.4rem;
-      line-height: 0.4rem;
+      height: 0.6rem;
+      line-height: 0.6rem;
       padding: 0 0.13rem;
       font-size: 0.2rem;
       color: #999;
@@ -154,9 +176,10 @@ watchFocusAndInput(searchInputRef)
       gap: 0.1rem;
       margin-top: 0.1rem;
       .search-history-item {
-        height: 0.3rem;
-        line-height: 0.3rem;
-        padding: 0.05rem 0.1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.06rem 0.1rem;
         border-radius: 0.1rem;
         text-align: center;
         font-size: 0.2rem;
@@ -164,6 +187,10 @@ watchFocusAndInput(searchInputRef)
         background-color: #f6f6f6;
       }
     }
+  }
+
+  .frequency {
+    margin-top: 0.5rem;
   }
 }
 </style>

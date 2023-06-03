@@ -17,6 +17,16 @@ class SearchAPI {
   getSearchKeywords(keyword: string) {
     return request.get(`/searchmodule/searchKeywords/${keyword}`, false)
   }
+
+  // get history keyword list
+  getHistoryKeywords() {
+    return request.get('/searchmodule/searchHistoryKeywords', false)
+  }
+
+  // get history keyword list order by clickcount desc
+  getHistoryKeywordsDesc() {
+    return request.get('/searchmodule/searchHistoryKeywordsDesc', false)
+  }
 }
 
 export default SearchAPI.searchAPI

@@ -14,17 +14,16 @@ class SearchService {
 
   static watchFocusAndInput(inputRef: Ref<HTMLInputElement | null>) {
     const debouncedKeywords = refDebounced(SearchService.searchStoreRefs.keyword, 600) // debounce updates of ref
+
     async function inputEffect() {
-      // eslint-disable-next-line no-console
-      console.log('input effect is running...')
       if (debouncedKeywords.value !== '') {
-        SearchService.isAutoComplete.value = true
-        inputRef.value!.placeholder = ''
-        // TODO: refactor
         await searchStore.storeSearchKeywords(debouncedKeywords.value)
+        SearchService.toggleAutoComplete(true)
+        inputRef.value!.placeholder = ''
       }
       else {
-        SearchService.isAutoComplete.value = false
+        SearchService.toggleAutoComplete(false)
+        searchStore.searchKeywords.length = 0
         inputRef.value!.placeholder = 'please input your keywords...'
       }
     }
@@ -50,7 +49,17 @@ class SearchService {
       await SearchService.updateSearchHistory(historyKeyword)
     else
       await SearchService.addSearchHistory(historyKeyword)
+
     SearchService.toggleAutoComplete(false)
+    SearchService.storeHistoryKeywordsDesc()
+  }
+
+  static async storeHistoryKeywords() {
+    await searchStore.storeHistorKeywords()
+  }
+
+  static async storeHistoryKeywordsDesc() {
+    await searchStore.storeHistoryKeywordsDesc()
   }
 }
 

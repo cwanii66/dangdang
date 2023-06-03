@@ -17,6 +17,7 @@ export interface SearchStoreState {
   keyword: string
   searchKeywords: Keyword[]
   historyKeywords: string[]
+  historyKeywordsDesc: string[]
 }
 
 export const useSearchStore = defineStore('search-store', {
@@ -24,13 +25,17 @@ export const useSearchStore = defineStore('search-store', {
     keyword: '', // user input
     searchKeywords: [],
     historyKeywords: [],
+    historyKeywordsDesc: [],
   }),
   getters: {
     getSearchKeywords(state) {
       return state.searchKeywords
     },
-    getHistoryKeywords(state) {
+    getHistoryKeywords(state): string[] {
       return state.historyKeywords.length > 0 ? state.historyKeywords : storage.get('historyKeywords')
+    },
+    getHistoryKeywordsDesc(state): string[] {
+      return state.historyKeywordsDesc
     },
   },
   actions: {
@@ -42,11 +47,28 @@ export const useSearchStore = defineStore('search-store', {
       const addedHkwid = await searchAPI.addSearchHistory(historyKeyword)
       if (addedHkwid.data) {
         const historyKeywordList = storage.set('historyKeywords', historyKeyword, OPTION.ACCUMULATE)
-        this.historyKeywords = historyKeywordList
+        this.historyKeywords = historyKeywordList.slice(-9).reverse()
       }
     },
     async updateSearchHistory(historyKeyword: string) {
-      const affectedRows = await searchAPI.updateSearchHistory(historyKeyword)
+      await searchAPI.updateSearchHistory(historyKeyword)
+    },
+    async storeHistorKeywords() {
+      const historyKeywordList = await searchAPI.getHistoryKeywords()
+      this.historyKeywords
+        = historyKeywordList.data
+          .map((item: HistoryKeyword) => item.historykeyword)
+          .slice(-9)
+          .reverse()
+      if (!storage.get('historyKeywords'))
+        storage.set('historyKeywords', this.historyKeywords)
+    },
+    async storeHistoryKeywordsDesc() {
+      const historyKeywordList = await searchAPI.getHistoryKeywordsDesc()
+      this.historyKeywordsDesc
+        = historyKeywordList.data
+          .map((item: HistoryKeyword) => item.historykeyword)
+          .slice(0, 6)
     },
   },
 })
