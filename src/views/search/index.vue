@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useToggle } from '@vueuse/core'
 import EmptySearch from './EmptySearch.vue'
 import SearchService from './service'
 import router from '@/router'
@@ -9,6 +10,7 @@ const {
   searchStoreRefs,
   watchFocusAndInput,
   addOrUpdateSearchHistory,
+  delSearchHistory,
   toggleAutoComplete,
   storeHistoryKeywords,
   storeHistoryKeywordsDesc,
@@ -20,6 +22,8 @@ storeHistoryKeywords()
 storeHistoryKeywordsDesc()
 
 watchFocusAndInput(searchInputRef)
+
+const [isShowSearchFound, toggleSearchFound] = useToggle(true)
 </script>
 
 <template>
@@ -52,7 +56,7 @@ watchFocusAndInput(searchInputRef)
     <div class="search-history">
       <div class="search-history-title">
         <span class="history-text">搜索历史</span>
-        <i class="iconfont icon-shanchu del" />
+        <i v-show="getHistoryKeywords.length" @click="delSearchHistory()" class="iconfont icon-shanchu del" />
       </div>
       <div class="search-history-list">
         <div v-for="historyKeyword, idx in getHistoryKeywords" :key="idx" class="search-history-item">
@@ -63,9 +67,10 @@ watchFocusAndInput(searchInputRef)
     <div class="search-history frequency">
       <div class="search-history-title">
         <span class="history-text">搜索发现</span>
-        <i class="iconfont icon-shanchu del" />
+        <span v-show="isShowSearchFound" @click="toggleSearchFound()">隐藏</span>
+        <span v-show="!isShowSearchFound" @click="toggleSearchFound()">展开</span>
       </div>
-      <div class="search-history-list">
+      <div v-show="isShowSearchFound" class="search-history-list">
         <div v-for="historyKeyword, idx in getHistoryKeywordsDesc" :key="idx" class="search-history-item">
           <span>{{ historyKeyword }}</span>
         </div>

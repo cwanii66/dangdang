@@ -1,13 +1,12 @@
 import { storeToRefs } from 'pinia'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref, shallowReactive } from 'vue'
 import BookService from '.'
+import CompUtil from '@/utils/CompUtil'
 import { useShopCartStore } from '@/pstore/shopcart'
 import type { BookInfo } from '@/pstore/books'
 import type { ShopCartInfo } from '@/pstore/shopcart'
 import router from '@/router'
 
-type MessageType = '' | 'success' | 'warning' | 'info' | 'error'
 interface Ball {
   isHidden: boolean
   addBtnTarget?: EventTarget | null
@@ -156,7 +155,7 @@ export default class ShopCartService {
   }
 
   static async deleteFromShopCart(bookItem: BookInfo) {
-    ShopCartService.confirm(
+    CompUtil.confirm(
       `确定要删除《${bookItem.bookname}》吗？`,
       '删除确认',
       '确定',
@@ -167,15 +166,15 @@ export default class ShopCartService {
         const shopCartId = ShopCartService.getExistShopCartId(bookItem)!
         await shopCartStore.deleteShopCart(shopCartId)
         BookService.updateBookNum(0, bookItem.ISBN)
-        ElMessage.success('删除成功')
+        CompUtil.message.success('删除成功')
       })
       .catch((reason) => {
-        reason === 'cancel' && ElMessage.info('已取消删除')
+        reason === 'cancel' && CompUtil.message.info('已取消删除')
       })
   }
 
   static async deleteInShopCart(shopCart: ShopCartInfo) {
-    ShopCartService.confirm(
+    CompUtil.confirm(
       `确定要删除《${shopCart.bookname}》吗？`,
       '删除确认',
       '确定',
@@ -184,10 +183,10 @@ export default class ShopCartService {
     )
       .then(async () => {
         await shopCartStore.deleteShopCart(shopCart.shopcartid!)
-        ElMessage.success('删除成功')
+        CompUtil.message.success('删除成功')
       })
       .catch((reason) => {
-        reason === 'cancel' && ElMessage.info('已取消删除')
+        reason === 'cancel' && CompUtil.message.info('已取消删除')
       })
   }
 
@@ -197,22 +196,6 @@ export default class ShopCartService {
 
   static back() {
     router.back()
-  }
-
-  static confirm(
-    message: string,
-    title: string,
-    confirmButtonText: string,
-    cancelButtonText: string,
-    type: MessageType,
-  ) {
-    return ElMessageBox.confirm(message, title, {
-      confirmButtonText,
-      cancelButtonText,
-      type,
-      distinguishCancelAndClose: true,
-      center: true,
-    })
   }
 
   private static moveBall(eventTarget: EventTarget) {

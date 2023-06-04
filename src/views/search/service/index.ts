@@ -2,6 +2,7 @@ import { ref, watchEffect } from 'vue'
 import { refDebounced } from '@vueuse/core'
 import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import CompUtil from '@/utils/CompUtil'
 import { useSearchStore } from '@/pstore/search'
 
 export const searchStore = useSearchStore()
@@ -60,6 +61,32 @@ class SearchService {
 
   static async storeHistoryKeywordsDesc() {
     await searchStore.storeHistoryKeywordsDesc()
+  }
+
+  static async delSearchHistory() {
+    CompUtil.confirm(
+      'Are you sure to delete all search history?',
+      'Delete Search History',
+      'confirm',
+      'cancel',
+      'warning',
+    )
+      .then(async () => {
+        await searchStore.delSearchHistory()
+        CompUtil.message({
+          message: 'Delete Search History Successfully!',
+          type: 'success',
+          duration: 1000,
+        })
+      })
+      .catch((reason) => {
+        reason === 'cancel'
+          && CompUtil.message({
+            message: 'Delete Search History Cancelled!',
+            type: 'warning',
+            duration: 1000,
+          })
+      })
   }
 }
 

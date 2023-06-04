@@ -27,6 +27,11 @@ class SearchAPI {
   getHistoryKeywordsDesc() {
     return request.get('/searchmodule/searchHistoryKeywordsDesc', false)
   }
+
+  // delete history keywords
+  delSearchHistory() {
+    return request.delete('/searchmodule/delHistoryKeywords', false)
+  }
 }
 
 export default SearchAPI.searchAPI

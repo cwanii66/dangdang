@@ -32,10 +32,10 @@ export const useSearchStore = defineStore('search-store', {
       return state.searchKeywords
     },
     getHistoryKeywords(state): string[] {
-      return state.historyKeywords.length > 0 ? state.historyKeywords : storage.get('historyKeywords')
+      return state.historyKeywords.length > 0 ? state.historyKeywords : storage.get('historyKeywords', OPTION.ACCUMULATE)
     },
     getHistoryKeywordsDesc(state): string[] {
-      return state.historyKeywordsDesc
+      return state.historyKeywordsDesc.length > 0 ? state.historyKeywordsDesc : storage.get('historyKeywordsDesc', OPTION.ACCUMULATE)
     },
   },
   actions: {
@@ -69,6 +69,13 @@ export const useSearchStore = defineStore('search-store', {
         = historyKeywordList.data
           .map((item: HistoryKeyword) => item.historykeyword)
           .slice(0, 6)
+      if (!storage.get('historyKeywordsDesc'))
+        storage.set('historyKeywordsDesc', historyKeywordList.data)
+    },
+    async delSearchHistory() {
+      await searchAPI.delSearchHistory()
+      this.historyKeywords.length = 0
+      storage.remove('historyKeywords')
     },
   },
 })
