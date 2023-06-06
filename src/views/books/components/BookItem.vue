@@ -3,10 +3,10 @@ import BookService from '../service'
 import ShopCartOperation from './ShopCartOperation.vue'
 import getImg from '@/utils/imgUtil'
 
-const { fetchBookList, bookStoreRefs } = BookService
+const { searchBooks, bookStoreRefs } = BookService
 const { getBookList } = bookStoreRefs
 
-fetchBookList()
+searchBooks()
 </script>
 
 <template>

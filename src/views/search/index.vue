@@ -9,7 +9,7 @@ const {
   isAutoComplete,
   searchStoreRefs,
   watchFocusAndInput,
-  addOrUpdateSearchHistory,
+  searchBooksByKeyword,
   delSearchHistory,
   toggleAutoComplete,
   storeHistoryKeywords,
@@ -49,7 +49,7 @@ const [isShowSearchFound, toggleSearchFound] = useToggle(true)
     </div>
     <div v-show="isAutoComplete" class="auto-complete">
       <div v-for="searchKeywordObj, idx in getSearchKeywords" :key="idx" class="complete-item">
-        <span class="complete-item-text" @mousedown.self="addOrUpdateSearchHistory(searchKeywordObj.keyword)">{{ searchKeywordObj.keyword }}</span>
+        <span class="complete-item-text" @mousedown.self="searchBooksByKeyword(searchKeywordObj.keyword)">{{ searchKeywordObj.keyword }}</span>
       </div>
       <EmptySearch v-show="getSearchKeywords.length === 0 || !getSearchKeywords" />
     </div>

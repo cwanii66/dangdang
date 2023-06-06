@@ -18,6 +18,7 @@ export interface SearchStoreState {
   searchKeywords: Keyword[]
   historyKeywords: string[]
   historyKeywordsDesc: string[]
+  autoCompKeyword: string
 }
 
 export const useSearchStore = defineStore('search-store', {
@@ -26,6 +27,7 @@ export const useSearchStore = defineStore('search-store', {
     searchKeywords: [],
     historyKeywords: [],
     historyKeywordsDesc: [],
+    autoCompKeyword: '',
   }),
   getters: {
     getSearchKeywords(state) {
@@ -37,8 +39,15 @@ export const useSearchStore = defineStore('search-store', {
     getHistoryKeywordsDesc(state): string[] {
       return state.historyKeywordsDesc.length > 0 ? state.historyKeywordsDesc : storage.get('historyKeywordsDesc', OPTION.ACCUMULATE)
     },
+    getAutoCompKeyword(state): string {
+      return state.autoCompKeyword ? state.autoCompKeyword : storage.get('autoCompKeyword')
+    },
   },
   actions: {
+    storeCompKeyword(autoCompKeyword: string) {
+      this.autoCompKeyword = autoCompKeyword
+      storage.set('autoCompKeyword', autoCompKeyword)
+    },
     async storeSearchKeywords(keyword: string) {
       const keywordList = await searchAPI.getSearchKeywords(keyword)
       this.searchKeywords = keywordList.data

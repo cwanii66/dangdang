@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import storage from 'store'
+import { useSearchStore } from '../search'
+import storage from '@/utils/storageUtil'
 import BookAPI from '@/api/BookAPI'
 
 export interface BookInfo {
@@ -20,7 +21,16 @@ export interface BookInfo {
 
 export interface BookState {
   bookList: BookInfo[]
+  operate?: Operate
 }
+
+export enum Operate {
+  INIT = 0,
+  THIRDCTGYID = 1,
+  AUTOCOMPKEYWORD = 2,
+}
+
+const searchStore = useSearchStore()
 
 function toFixed(num: number, digit: number) {
   return Number(num.toFixed(digit))
@@ -29,13 +39,24 @@ function toFixed(num: number, digit: number) {
 export const useBookStore = defineStore('book-store', {
   state: (): BookState => ({
     bookList: [],
+    operate: Operate.INIT,
   }),
   getters: {
+    getAutoCompKeyword: (): string => {
+      return searchStore.getAutoCompKeyword // books view is driven by related search keyword
+    },
     getBookList: (state): BookInfo[] => {
       return state.bookList.length > 0 ? state.bookList : storage.get('bookList')
     },
+    getOperate: (state): Operate => {
+      return state.operate || storage.get('operate')
+    },
   },
   actions: {
+    storeOperate(operate: Operate) {
+      this.operate = operate
+      storage.set('operate', this.operate)
+    },
     async findBookList(thirdCtgyId: number, sortField: string, sortType: string) {
       const bookList = await BookAPI.getBookListByThirdCtgyId(thirdCtgyId, sortField, sortType)
       bookList.data = bookList.data.map((book: BookInfo) => {

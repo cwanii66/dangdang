@@ -13,12 +13,19 @@ export enum OPTION {
   NONE = -1,
 }
 
+enum Operate {
+  INIT = 0,
+  THIRDCTGYID = 1,
+  AUTOCOMPKEYWORD = 2,
+}
+
 class Storage {
   static storage: Storage = new Storage()
 
   set(key: string, value: string): any
   set(key: string, value: object): any
   set(key: string, value: any[]): any
+  set(key: string, value: Operate): any
   set(key: string, value: any[], option: OPTION): any
   set(key: string, value: string, option: OPTION): any
   set(key: string, value: object, option: OPTION, propKey: string, propValue: any): any

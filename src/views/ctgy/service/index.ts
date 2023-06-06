@@ -4,8 +4,10 @@ import { storeToRefs } from 'pinia'
 import router from '@/router'
 
 import { useCtgyStore } from '@/pstore/ctgy'
+import { Operate, useBookStore } from '@/pstore/books'
 import type { SecondCtgy, ThirdCtgy } from '@/pstore/ctgy/state'
 
+const bookStore = useBookStore()
 export const ctgyStore = useCtgyStore()
 
 // service class for First to Third category
@@ -42,6 +44,7 @@ class FirstToThirdCtgy {
 
   static navigateToBooks(thirdCtgy: ThirdCtgy, secondCtgy: SecondCtgy) {
     FirstToThirdCtgy.storeCtgysWhenNavigate(thirdCtgy, secondCtgy)
+    bookStore.storeOperate(Operate.THIRDCTGYID) // set operate for what to be rendered in Book view
     router.push({
       name: 'books',
     })

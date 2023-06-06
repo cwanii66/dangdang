@@ -2,7 +2,7 @@ import { storeToRefs } from 'pinia'
 import { ref, watchEffect } from 'vue'
 import type { Ref } from 'vue'
 import ShopCartService, { shopCartStore } from './shopcart'
-import { useBookStore } from '@/pstore/books'
+import { Operate, useBookStore } from '@/pstore/books'
 import type { BookInfo } from '@/pstore/books'
 import FstToThrdCtgy from '@/views/ctgy/service'
 
@@ -19,6 +19,14 @@ class BookService {
   static sortType: Ref<SortType> = ref('desc')
   static isDesc: Ref<boolean> = ref(true) // depends on sort type
 
+  static searchBooks() {
+    const operate = bookStore.getOperate
+    if (operate === Operate.THIRDCTGYID)
+      BookService.fetchBookList()
+    else if (operate === Operate.AUTOCOMPKEYWORD)
+      BookService.findBookListByAutoCompKeyword()
+  }
+
   static async fetchBookList() {
     watchEffect(async () => {
       if (BookService.activeThirdCtgyId.value < 0)
@@ -32,6 +40,10 @@ class BookService {
 
       await BookService.udBkNumWithSCLstNum()
     })
+  }
+
+  static async findBookListByAutoCompKeyword() {
+    const autoCompKeyword = bookStore.getAutoCompKeyword
   }
 
   static setActiveThirdCtgyId(thirdCtgyId: number) {

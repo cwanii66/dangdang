@@ -4,7 +4,10 @@ import type { Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import CompUtil from '@/utils/CompUtil'
 import { useSearchStore } from '@/pstore/search'
+import { Operate, useBookStore } from '@/pstore/books'
+import router from '@/router'
 
+const bookStore = useBookStore()
 export const searchStore = useSearchStore()
 
 class SearchService {
@@ -87,6 +90,13 @@ class SearchService {
             duration: 1000,
           })
       })
+  }
+
+  static async searchBooksByKeyword(historyKeyword: string) {
+    await SearchService.addOrUpdateSearchHistory(historyKeyword)
+    bookStore.storeOperate(Operate.AUTOCOMPKEYWORD)
+    searchStore.storeCompKeyword(historyKeyword)
+    router.push({ name: 'books' })
   }
 }
 
