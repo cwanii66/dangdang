@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import BookService from '../service'
 
 const props = defineProps<{
@@ -23,6 +23,16 @@ watchEffect(() => {
 })
 
 initForBookSortComp()
+
+const selectedPublisherIds = ref<number[]>([])
+const isSelected = computed(() => (publisherId: number) => selectedPublisherIds.value.includes(publisherId))
+function selectPublisher(publisherId: number) {
+  const index = selectedPublisherIds.value.indexOf(publisherId)
+  if (index === -1)
+    selectedPublisherIds.value.push(publisherId)
+  else
+    selectedPublisherIds.value.splice(index, 1)
+}
 </script>
 
 <template>
@@ -64,8 +74,8 @@ initForBookSortComp()
             :key="publisher.publishid"
             class="publisher-item"
           >
-            <span class="publisher-item-name">{{ publisher.publishername }}</span>
-            <span><i class="iconfont icon-duigou2" /></span>
+            <span class="publisher-item-name" @click.stop="selectPublisher(publisher.publishid)">{{ publisher.publishername }}</span>
+            <span v-show="isSelected(publisher.publishid)"><i class="iconfont icon-duigou2" /></span>
           </div>
         </div>
         <div class="confirm-reset">
@@ -73,7 +83,7 @@ initForBookSortComp()
           <span
             class="confirm"
             @click.stop="
-              findBooksByPublisherIds(),
+              findBooksByPublisherIds(selectedPublisherIds),
               togglePublishersOpen()
             "
           >搜索</span>

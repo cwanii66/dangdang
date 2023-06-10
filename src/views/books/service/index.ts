@@ -2,7 +2,6 @@ import { storeToRefs } from 'pinia'
 import { ref, watch, watchEffect } from 'vue'
 import type { Ref } from 'vue'
 import ShopCartService, { shopCartStore } from './shopcart'
-import { pickValsFromObjArr } from '@/utils/generalUtil'
 import { Operate, useBookStore } from '@/pstore/books'
 import type { BookInfo } from '@/pstore/books'
 import FstToThrdCtgy from '@/views/ctgy/service'
@@ -78,9 +77,8 @@ class BookService {
       await bookStore.findPublishersByAutoCompKeyword(bookStore.getAutoCompKeyword)
   }
 
-  static async findBooksByPublisherIds() {
-    const publisherIds = pickValsFromObjArr(bookStore.publishers, 'publishid')
-    await bookStore.findBooksByPublisherIds(publisherIds)
+  static async findBooksByPublisherIds(selectedPublisherIds: number[]) {
+    await bookStore.findBooksByPublisherIds(selectedPublisherIds)
   }
 
   static initForBookSortComp() {
