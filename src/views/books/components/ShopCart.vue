@@ -1,12 +1,22 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import ShopCartService from '../service/shopcart'
 
 const [totalBookNum, totalBookPrice] = ShopCartService.refreshShopCartInfo()
 const { ball, onBeforeEnter, onEnter, onAfterEnter, toShopCarts } = ShopCartService
+
+const isShowShopCart = ref<boolean>(true)
+function ctrlShopCart(isShow: boolean) {
+  isShowShopCart.value = isShow
+}
+
+defineExpose({
+  ctrlShopCart,
+})
 </script>
 
 <template>
-  <div class="shopcart">
+  <div class="shopcart" v-show="isShowShopCart">
     <div class="content">
       <div class="content-left" @click="toShopCarts">
         <i class="iconfont icon-gouwuche" :class="{ highlight: totalBookNum > 0 }" />
@@ -18,7 +28,7 @@ const { ball, onBeforeEnter, onEnter, onAfterEnter, toShopCarts } = ShopCartServ
         <div class="totalprice">
           &yen;{{ totalBookPrice }}
         </div>
-        <div @click="toShopCarts" class="settlement">
+        <div class="settlement" @click="toShopCarts">
           <span>去结算</span>
           <i class="iconfont icon-xiangyoujiantou" />
         </div>

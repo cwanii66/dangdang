@@ -1,36 +1,24 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import BookService from '../service'
 import FstToThrdCtgy from '@/views/ctgy/service'
 
 const { openOrCollapseInBook } = FstToThrdCtgy
-const { setActiveThirdCtgyId } = BookService
-const { getThirdCtgyList, getSubThirdCtgyList, isSpreadCtgys, getThirdCtgy } = FstToThrdCtgy.ctgyStoreRefs
+const { setActiveThirdCtgyId, activeThirdCtgyId } = BookService
+const { getThirdCtgyList, getSubThirdCtgyList, isSpreadCtgys } = FstToThrdCtgy.ctgyStoreRefs
 
-const activeThirdCtgyId = ref<number>(getThirdCtgy.value.thirdctgyId)
 const thirdCtgyList = computed(() => isSpreadCtgys.value ? getThirdCtgyList.value : getSubThirdCtgyList.value)
-const allEl = ref<HTMLDivElement | null>(null)
-
-function setActiveThirdCtgy(idx: number) {
-  if (idx === -1) {
-    allEl.value?.classList.add('active-ctgy')
-    activeThirdCtgyId.value = -1
-  }
-  else {
-    allEl.value?.classList.remove('active-ctgy')
-    activeThirdCtgyId.value = thirdCtgyList.value[idx].thirdctgyId
-  }
-  setActiveThirdCtgyId(activeThirdCtgyId.value)
-}
 </script>
 
 <template>
   <div class="content">
-    <div ref="allEl" class="thrdctgys" @click="setActiveThirdCtgy(-1)">
+    <div class="thrdctgys" :class="{ 'active-ctgy': activeThirdCtgyId === -1 }" @click="setActiveThirdCtgyId(-1)">
       <span class="thirdctgy-item">全部</span>
     </div>
-    <div v-for="thirdctgy, idx in thirdCtgyList" :key="thirdctgy.thirdctgyId" class="thrdctgys"
-      :class="{ 'active-ctgy': activeThirdCtgyId === thirdctgy.thirdctgyId }" @click="setActiveThirdCtgy(idx)">
+    <div
+      v-for="thirdctgy in thirdCtgyList" :key="thirdctgy.thirdctgyId" class="thrdctgys"
+      :class="{ 'active-ctgy': activeThirdCtgyId === thirdctgy.thirdctgyId }" @click="setActiveThirdCtgyId(thirdctgy)"
+    >
       <span class="thirdctgy-item">{{ thirdctgy.thirdname }}</span>
     </div>
     <div class="icon">

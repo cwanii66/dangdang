@@ -16,7 +16,7 @@ const { getThirdCtgy } = ctgyStoreRefs
           <i class="iconfont icon-close" />
         </div>
         <div class="input-bar">
-          <input type="text" class="search-keyword-input" @click="toSearch">
+          <input type="text" class="search-keyword-input" @click.prevent="toSearch">
           <i class="iconfont icon-iconfontscan" />
         </div>
       </div>
@@ -46,13 +46,13 @@ const { getThirdCtgy } = ctgyStoreRefs
       .input-keyword {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         align-self: center;
-        width: 0.7rem;
+        width: min-content;
         height: 0.3rem;
         border-radius: 1rem;
         background-color: #838383;
-        padding: 0.09rem 0.45rem 0.09rem 0.13rem;
+        padding: 0.09rem 0.13rem;
         color: white;
         .keyword {
           white-space: nowrap;

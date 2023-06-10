@@ -36,3 +36,8 @@ export function toTypeString(value: unknown): string {
 export function isPlainObject(val: unknown): val is object {
   return toTypeString(val) === '[object Object]'
 }
+
+export type EleOfArr<T> = T extends Array<infer U> ? U : never
+export function pickValsFromObjArr<T extends any[], K extends keyof EleOfArr<T>, E = EleOfArr<T>>(arr: T, key: K) {
+  return arr.map(({ [key]: val }: E) => val)
+}

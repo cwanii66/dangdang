@@ -62,6 +62,7 @@ searchBooks()
   display: grid;
   grid-template-columns: 2.3rem 2.7rem;
   grid-auto-flow: row;
+  height: 4.5rem;
   justify-items: center;
   grid-auto-rows: min-content;
 

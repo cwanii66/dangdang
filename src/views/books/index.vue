@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import BookSearchBar from './components/BookSearchBar.vue'
 import BreadCrumb from './components/BreadCrumb.vue'
 import ThirdCtgy from './components/ThirdCtgy.vue'
@@ -6,21 +7,26 @@ import BookItem from './components/BookItem.vue'
 import BookSort from './components/BookSort.vue'
 import ShopCart from './components/ShopCart.vue'
 import getImg from '@/utils/imgUtil'
+
+const shopcartRef = ref<InstanceType<typeof ShopCart>>()
+function ctrlShopCart(isShow: boolean) {
+  shopcartRef.value?.ctrlShopCart(isShow)
+}
 </script>
 
 <template>
   <BookSearchBar />
   <aside class="ad">
-    <img class="ad-img" :src="getImg('2.png')" />
+    <img class="ad-img" :src="getImg('2.png')">
   </aside>
   <main class="book-ctgy">
     <BreadCrumb />
     <ThirdCtgy />
-    <BookSort />
+    <BookSort :ctrlShopCart="ctrlShopCart" />
     <BookItem />
   </main>
   <footer>
-    <ShopCart />
+    <ShopCart ref="shopcartRef" />
   </footer>
 </template>
 
