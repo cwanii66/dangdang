@@ -61,6 +61,14 @@ class AxiosUtil {
     )
   }
 
+  private handleTokenResponseErr(msg: string) {
+    if (msg === 'invalid token' || msg === 'token expired') {
+      storage.remove('token')
+      storage.remove('loginUser')
+      router.push('/login')
+    }
+  }
+
   beforeResponseIntercept() {
     this.axiosInstance.interceptors.response.use(
       (res) => {
@@ -70,11 +78,7 @@ class AxiosUtil {
         }
         else if (code === 500) {
           ElMessage.error(`error: ${msg}`)
-          if (msg === 'invalid token' || msg === 'token expired') {
-            storage.remove('token')
-            storage.remove('loginUser')
-            router.push('/login')
-          }
+          this.handleTokenResponseErr(msg)
           return Promise.reject(msg)
         }
         else {

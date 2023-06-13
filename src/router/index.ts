@@ -2,6 +2,7 @@
 
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
+import storage from '@/utils/storageUtil'
 
 const ctgy = () => import('@/views/ctgy/index.vue')
 const books = () => import('@/views/books/index.vue')
@@ -39,12 +40,28 @@ const routes: RouteRecordRaw[] = [
     name: 'login',
     path: '/login',
     component: login,
+    beforeEnter: (to, from, next) => {
+      const token = storage.get('token')
+      if (token)
+        next({ name: 'ctgy' })
+      else
+        next()
+    },
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+})
+
+// auth guard
+router.beforeEach((to, from, next) => {
+  const token = storage.get('token')
+  if (token || to.name === 'login')
+    next()
+  else
+    next({ name: 'login' })
 })
 
 export default router
