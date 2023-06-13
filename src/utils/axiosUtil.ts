@@ -2,6 +2,8 @@ import axios from 'axios'
 import type { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
 import config from '../config'
+import storage from '@/utils/storageUtil'
+import router from '@/router'
 
 const SERVER_ERROR = 'address error: request server / network connect failed'
 
@@ -46,6 +48,11 @@ class AxiosUtil {
   beforeRequestIntercept() {
     this.axiosInstance.interceptors.request.use(
       (req) => {
+        const token = storage.get('token')
+        const headers = req.headers
+
+        if (!headers.Authorization && token)
+          headers.Authorization = `Bearer ${token}`
         return req
       },
       (err) => {
@@ -63,6 +70,11 @@ class AxiosUtil {
         }
         else if (code === 500) {
           ElMessage.error(`error: ${msg}`)
+          if (msg === 'invalid token' || msg === 'token expired') {
+            storage.remove('token')
+            storage.remove('loginUser')
+            router.push('/login')
+          }
           return Promise.reject(msg)
         }
         else {

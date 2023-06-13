@@ -11,8 +11,8 @@ const { publishers } = BookService.bookStoreRefs
 
 const isShowShopCart = computed(() => !isPublishersOpen.value && !isAuthorsOpen.value)
 function togglePublishersOpen() {
-  document.body.style.overflow = isPublishersOpen.value ? 'auto' : 'hidden'
   isPublishersOpen.value = !isPublishersOpen.value
+  document.body.style.overflow = isPublishersOpen.value ? 'hidden' : 'auto'
 }
 function toggleAuthorsOpen() {
   document.body.style.overflow = isAuthorsOpen.value ? 'auto' : 'hidden'
@@ -79,7 +79,7 @@ function selectPublisher(publisherId: number) {
           </div>
         </div>
         <div class="confirm-reset">
-          <span class="reset">重置</span>
+          <span class="reset" @click.self="togglePublishersOpen()">取消</span>
           <span
             class="confirm"
             @click.stop="

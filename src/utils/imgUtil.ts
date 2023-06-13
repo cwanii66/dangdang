@@ -2,6 +2,7 @@ import storage from 'store'
 
 export class ImgUtil {
   static #imgList: Record<string, string> = Object.create(null)
+  private static readonly defaultImgPath = '/src/assets/img/books/img_notfound.jpeg'
 
   static storeImgList() {
     const storeImgListFn = () => storage.set('imgList', ImgUtil.#imgList ?? {})
@@ -19,7 +20,7 @@ export class ImgUtil {
   }
 
   static getImg(imgName: string) {
-    return ImgUtil.#imgList[imgName]
+    return ImgUtil.#imgList[imgName] || ImgUtil.defaultImgPath
   }
 
   static loadAllImg() {

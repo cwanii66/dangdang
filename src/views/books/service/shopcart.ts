@@ -6,6 +6,7 @@ import { useShopCartStore } from '@/pstore/shopcart'
 import type { BookInfo } from '@/pstore/books'
 import type { ShopCartInfo } from '@/pstore/shopcart'
 import router from '@/router'
+import storage from '@/utils/storageUtil'
 
 interface Ball {
   isHidden: boolean
@@ -82,6 +83,33 @@ export default class ShopCartService {
     const totalBookNum = this.calcTotalNum()
     const totalBookPrice = this.calcTotalPrice()
     return [totalBookNum, totalBookPrice] as const
+  }
+
+  static async addBookToShopCartWithCheck(bookItem: BookInfo) {
+    const isLogin = !!storage.get('token')
+    if (isLogin) {
+      await ShopCartService.addBookToShopCart(bookItem)
+    }
+    else {
+      CompUtil.confirm(
+        '您还未登录，是否立即登录？',
+        '登录确认',
+        '确定',
+        '取消',
+        'warning',
+      )
+        .then(() => {
+          router.push('/login')
+        })
+        .catch((reason) => {
+          reason === 'cancel' && CompUtil.message({
+            message: '尚未登录',
+            type: 'info',
+            duration: 1000,
+          })
+        })
+    }
+    return isLogin
   }
 
   static async addBookToShopCart(bookItem: BookInfo) {

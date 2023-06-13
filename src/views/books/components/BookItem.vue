@@ -10,7 +10,7 @@ searchBooks()
 </script>
 
 <template>
-  <main class="content">
+  <div class="content">
     <div v-for="bookItem in getBookList" :key="bookItem.ISBN" class="book-item">
       <img class="bookpic" :src="getImg(bookItem.bookpicname)" alt="book image">
       <div class="bookinfo">
@@ -48,7 +48,7 @@ searchBooks()
         <ShopCartOperation :book-item="bookItem" />
       </div>
     </div>
-  </main>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -62,7 +62,7 @@ searchBooks()
   display: grid;
   grid-template-columns: 2.3rem 2.7rem;
   grid-auto-flow: row;
-  height: 4.5rem;
+  height: 4.3rem;
   justify-items: center;
   grid-auto-rows: min-content;
 
@@ -175,5 +175,9 @@ searchBooks()
     }
   }
 
+}
+
+.content:last-child {
+  margin-bottom: 0.73rem;
 }
 </style>

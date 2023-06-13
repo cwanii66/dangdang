@@ -7,12 +7,13 @@ const ctgy = () => import('@/views/ctgy/index.vue')
 const books = () => import('@/views/books/index.vue')
 const shopcarts = () => import('@/views/shopcarts/ShopCarts.vue')
 const search = () => import('@/views/search/index.vue')
+const login = () => import('@/views/user/Login.vue')
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'default',
-    redirect: '/books',
+    redirect: '/ctgy',
   },
   {
     name: 'ctgy',
@@ -33,6 +34,11 @@ const routes: RouteRecordRaw[] = [
     name: 'search',
     path: '/search',
     component: search,
+  },
+  {
+    name: 'login',
+    path: '/login',
+    component: login,
   },
 ]
 

@@ -8,14 +8,14 @@ defineProps<{
   shopCart?: ShopCartInfo
 }>()
 
-const { addBookToShopCart, updateFromShopCart, deleteFromShopCart, updateInShopCart, deleteInShopCart } = ShopCartService
+const { addBookToShopCartWithCheck, updateFromShopCart, deleteFromShopCart, updateInShopCart, deleteInShopCart } = ShopCartService
 </script>
 
 <template>
   <div class="shopcart">
     <div v-if="bookItem">
       <div v-if="!bookItem.purchasenum" class="addbtn">
-        <div class="addbtn-inner" @click="addBookToShopCart(bookItem)">
+        <div class="addbtn-inner" @click="addBookToShopCartWithCheck(bookItem)">
           添加到购物车
         </div>
       </div>
