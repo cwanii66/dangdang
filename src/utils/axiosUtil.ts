@@ -62,9 +62,9 @@ class AxiosUtil {
   }
 
   private handleTokenResponseErr(msg: string) {
-    if (msg === 'invalid token' || msg === 'token expired') {
-      storage.remove('token')
+    if (msg.split(':')[0] === '401') {
       storage.remove('loginUser')
+      storage.remove('token')
       router.push('/login')
     }
   }
