@@ -24,6 +24,8 @@ export interface BookState {
   bookList: BookInfo[]
   operate?: Operate
   publishers: Publihser[]
+  bookDetail: BookInfo
+  bookISBN: string
 }
 
 export enum Operate {
@@ -37,25 +39,43 @@ const searchStore = useSearchStore()
 function toFixed(num: number, digit: number) {
   return Number(num.toFixed(digit))
 }
+function isEmptyObj(obj: any) {
+  return Object.keys(obj).length === 0
+}
 
 export const useBookStore = defineStore('book-store', {
   state: (): BookState => ({
     bookList: [],
     operate: Operate.INIT,
     publishers: [],
+    bookDetail: {} as BookInfo,
+    bookISBN: '',
   }),
   getters: {
     getAutoCompKeyword: (): string => {
       return searchStore.getAutoCompKeyword // books view is driven by related search keyword
     },
+
     getBookList: (state): BookInfo[] => {
       return state.bookList.length > 0 ? state.bookList : storage.get('bookList')
     },
+
     getOperate: (state): Operate => {
       return state.operate || storage.get('operate')
     },
+
+    getBookDetail: (state): BookInfo => {
+      return isEmptyObj(state.bookDetail) ? storage.get('bookDetail') : state.bookDetail
+    },
+    getBookISBN: (state): string => {
+      return state.bookISBN || storage.get('bookISBN')
+    },
   },
   actions: {
+    storeBookISBN(isbn: string) {
+      this.bookISBN = isbn
+      storage.set('bookISBN', isbn)
+    },
     storeOperate(operate: Operate) {
       this.operate = operate
       storage.set('operate', this.operate)
@@ -87,6 +107,11 @@ export const useBookStore = defineStore('book-store', {
       const bookList = await BookAPI.findBooksByPublisherIds(publishIds)
       this.bookList = bookList.data
       storage.set('bookList', bookList.data)
+    },
+    async findBooksByISBN() {
+      const bookDetail = await BookAPI.findBooksByISBN(this.getBookISBN)
+      this.bookDetail = bookDetail.data
+      storage.set('bookDetail', this.bookDetail)
     },
   },
 })

@@ -77,7 +77,7 @@ class AxiosUtil {
           return res.data // match the server response data structure
         }
         else if (code === 500) {
-          ElMessage.error(`error: ${msg}`)
+          ElMessage.error(msg)
           this.handleTokenResponseErr(msg)
           return Promise.reject(msg)
         }

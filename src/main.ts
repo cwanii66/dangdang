@@ -9,6 +9,7 @@ import router from './router'
 ImgUtil.storeImgList()
 
 const app = createApp(App)
+
 app.use(router)
   .use(createPinia())
   .use(ElementPlus, { size: 'small' })

@@ -21,6 +21,10 @@ class BookAPI {
   findBooksByPublisherIds(publisherIds: number[]) {
     return request.post('/bookmodule/findBooksByPublisherIds', false, publisherIds)
   }
+
+  findBooksByISBN(isbn: string) {
+    return request.get(`/bookmodule/findBooksByISBN/${isbn}`, false)
+  }
 }
 
 export default BookAPI.bookAPI

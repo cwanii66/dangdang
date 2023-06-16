@@ -7,6 +7,7 @@ import type { BookInfo } from '@/pstore/books'
 import FstToThrdCtgy from '@/views/ctgy/service'
 import { useCtgyStore } from '@/pstore/ctgy'
 import type { ThirdCtgy } from '@/pstore/ctgy/state'
+import router from '@/router'
 
 type SortType = 'desc' | 'asc'
 type SortFieldType = keyof BookInfo
@@ -27,6 +28,11 @@ class BookService {
 
   static getOperate() {
     BookService.isAutoCompSearch.value = bookStore.getOperate === Operate.AUTOCOMPKEYWORD
+  }
+
+  static toBookDetail(isbn: string) {
+    bookStore.storeBookISBN(isbn)
+    router.push({ name: 'bookdetail' })
   }
 
   static searchBooks() {

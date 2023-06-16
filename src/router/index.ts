@@ -9,6 +9,9 @@ const books = () => import('@/views/books/index.vue')
 const shopcarts = () => import('@/views/shopcarts/ShopCarts.vue')
 const search = () => import('@/views/search/index.vue')
 const login = () => import('@/views/user/Login.vue')
+const bookdetail = () => import('@/views/bookdetail/index.vue')
+const goods = () => import('@/views/bookdetail/components/Goods.vue')
+const comments = () => import('@/views/bookdetail/components/comment/index.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -47,6 +50,31 @@ const routes: RouteRecordRaw[] = [
       else
         next()
     },
+  },
+  {
+    name: 'bookdetail',
+    path: '/bookdetail',
+    component: bookdetail,
+    redirect: { name: 'goods' },
+    children: [
+      {
+        name: 'goods',
+        path: 'goods',
+        component: goods,
+        meta: {
+          from: '',
+        },
+        beforeEnter: (to, from, next) => {
+          to.meta.from = from.name // set meta.from
+          next()
+        },
+      },
+      {
+        name: 'comments',
+        path: 'comments',
+        component: comments,
+      },
+    ],
   },
 ]
 

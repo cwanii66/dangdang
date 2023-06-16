@@ -3,7 +3,7 @@ import BookService from '../service'
 import ShopCartOperation from './ShopCartOperation.vue'
 import getImg from '@/utils/imgUtil'
 
-const { searchBooks, bookStoreRefs } = BookService
+const { searchBooks, bookStoreRefs, toBookDetail } = BookService
 const { getBookList } = bookStoreRefs
 
 searchBooks()
@@ -11,7 +11,11 @@ searchBooks()
 
 <template>
   <div class="content">
-    <div v-for="bookItem in getBookList" :key="bookItem.ISBN" class="book-item">
+    <div
+      v-for="bookItem in getBookList"
+      :key="bookItem.ISBN" class="book-item"
+      @click="toBookDetail(bookItem.ISBN)"
+    >
       <img class="bookpic" :src="getImg(bookItem.bookpicname)" alt="book image">
       <div class="bookinfo">
         <div class="bookinfo-brief">
