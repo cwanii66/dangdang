@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import BookDetailService from '../service'
+import { BookDetailService } from '../service'
 
 const { headerStyle } = BookDetailService
 
@@ -16,7 +16,7 @@ const activeIndex = ref<number>(0)
 
 <template>
   <header class="header" :style="headerStyle">
-    <i class="iconfont icon-zuojiantou1 left-arrow" />
+    <i class="iconfont icon-zuojiantou1 left-arrow" @click="$router.back()" />
     <div class="header-wrapper">
       <span
         v-for="{ name, text }, idx in headerLinks"

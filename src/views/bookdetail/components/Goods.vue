@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useEventListener } from '@vueuse/core'
-import BookDetailService from '../service'
+import { onBeforeRouteLeave } from 'vue-router'
+import { BookDetailService } from '../service'
 import getImg from '@/utils/imgUtil'
 
-const { imgRef, init, bookDetailScroll } = BookDetailService
+const { imgRef, init, bookDetailScroll, setHeaderOpacity } = BookDetailService
 const { getBookDetail } = BookDetailService.bookStoreRefs
 
 init()
@@ -11,10 +12,15 @@ init()
 useEventListener('scroll', () => {
   bookDetailScroll()
 })
+
+onBeforeRouteLeave(() => {
+  // navigate away, reset opacity
+  setHeaderOpacity('1')
+})
 </script>
 
 <template>
-  <div class="goods" v-if="getBookDetail">
+  <div v-if="getBookDetail" class="goods">
     <i class="iconfont icon-yuan-shixin-zuojiantou left-arrow" @click="$router.push({ name: 'books' })" />
     <div ref="imgRef" class="pic">
       <img
@@ -94,7 +100,7 @@ useEventListener('scroll', () => {
   position: absolute;
   top: 0.6rem;
   left: 0;
-  bottom: -10rem; // test opacity
+  bottom: -3rem;
   overflow-y: scroll;
   .left-arrow {
     position: absolute;

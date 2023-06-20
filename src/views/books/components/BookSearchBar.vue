@@ -7,7 +7,7 @@ const { getThirdCtgy } = ctgyStoreRefs
 
 <template>
   <div class="content">
-    <span @click="back"><i class="iconfont icon-xiangzuojiantou" /></span>
+    <span @click="$router.push({ name: 'ctgy' })"><i class="iconfont icon-xiangzuojiantou" /></span>
     <div class="search-bar">
       <i class="iconfont icon-fangdajing" />
       <div class="search-keyword">
