@@ -32,11 +32,13 @@ export const enum CommentLevel {
 
 interface CommentState {
   commentList: Comment[]
+  headLevelHide: boolean
 }
 
 export const useCommentStore = defineStore('comment', {
   state: (): CommentState => ({
     commentList: [],
+    headLevelHide: true,
   }),
   getters: {
     getCommentList(state) {

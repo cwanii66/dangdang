@@ -3,10 +3,11 @@ import { CommentService } from '../../../service'
 import { CommentLevel } from '@/pstore/comment'
 
 const { commentLevel, getCommentLevels } = CommentService
+const { headLevelHide } = CommentService.commentStoreRefs
 </script>
 
 <template>
-  <div class="comment-level">
+  <div v-show="headLevelHide" class="comment-level">
     <div class="comment-level-wrapper">
       <div class="more">
         <span class="all comment" @click="getCommentLevels(CommentLevel.ALL)">全部</span>

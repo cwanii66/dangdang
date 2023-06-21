@@ -55,6 +55,8 @@ export class CommentService {
     bad: 0,
   })
 
+  static replyShowIndex = ref<number>(-1)
+
   static async findCommentList() {
     await commentStore.findCommentList()
     CommentService.commentList.value = commentStore.getCommentList
@@ -62,7 +64,9 @@ export class CommentService {
   }
 
   static getCommentLevels(commentLevel: CommentLevel) {
-    const originalComments = commentStore.getCommentList
+    const originalComments
+      = CommentService.commentList.value
+      = commentStore.getCommentList
     const comments = originalComments.filter(comment => comment.evaluatelevel === commentLevel)
     if (commentLevel !== CommentLevel.ALL)
       CommentService.commentList.value = comments
@@ -91,5 +95,39 @@ export class CommentService {
     CommentService.commentLevel.good = 0
     CommentService.commentLevel.medium = 0
     CommentService.commentLevel.bad = 0
+  }
+
+  static setReplyShowIndex(index: number) {
+    CommentService.replyShowIndex.value = index
+  }
+
+  static reply(idx: number, event: Event) {
+    CommentService.toggleReplyPanel(event, 'block')
+    CommentService.setReplyShowIndex(idx) // idx means the index of the comment
+    CommentService.ctrlHeadAndLevel(false)
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' }) // reset scroll position
+    CommentService.ctrlScroll('hidden')
+  }
+
+  static ctrlHeadAndLevel(visible: boolean) {
+    commentStore.headLevelHide = visible
+  }
+
+  static toggleReplyPanel(event: Event, display: string) {
+    const replyTarget = event.currentTarget as HTMLElement
+    const replyPanel = replyTarget.parentElement!.nextElementSibling as HTMLElement
+    replyPanel.style.display = display
+  }
+
+  static cancelReply(event: Event) {
+    CommentService.toggleReplyPanel(event, 'none')
+    CommentService.setReplyShowIndex(-1) // -1 means no reply panel is shown
+    CommentService.ctrlHeadAndLevel(true)
+    CommentService.ctrlScroll('auto')
+  }
+
+  static ctrlScroll(scrollMode: string) {
+    document.documentElement.style.overflow = scrollMode
+    document.body.style.overflow = scrollMode
   }
 }

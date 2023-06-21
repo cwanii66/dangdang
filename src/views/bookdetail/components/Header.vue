@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { BookDetailService } from '../service'
-
-const { headerStyle } = BookDetailService
+import { BookDetailService, CommentService } from '../service'
 
 const headerLinks = [
   { name: 'goods', from: 'comments', text: '商品' },
@@ -10,12 +8,14 @@ const headerLinks = [
   { name: 'comments', from: 'goods', text: '评论' },
   { name: 'comments', from: 'goods', text: '相关' },
 ] as const
+const { headerStyle } = BookDetailService
+const { headLevelHide } = CommentService.commentStoreRefs
 
 const activeIndex = ref<number>(0)
 </script>
 
 <template>
-  <header class="header" :style="headerStyle">
+  <header v-show="headLevelHide" class="header" :style="headerStyle">
     <i class="iconfont icon-zuojiantou1 left-arrow" @click="$router.back()" />
     <div class="header-wrapper">
       <span
