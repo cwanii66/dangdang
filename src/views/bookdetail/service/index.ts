@@ -131,3 +131,5 @@ export class CommentService {
     document.body.style.overflow = scrollMode
   }
 }
+
+export * from './Reply'

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { CommentService } from '../../../service'
+import { CommentService, ReplyService } from '../../../service'
+
 import getImg from '@/utils/imgUtil'
 
 const { commentList, reply, cancelReply, replyShowIndex } = CommentService
+const { showReplies, limit, unfoldReplies, foldReplies, isShowMore, isShowLess } = ReplyService
 
 const commentsRef = ref<HTMLElement | null>(null)
 const replyOverlayRef = ref<HTMLElement | null>(null)
@@ -53,6 +55,25 @@ const replyOverlayRef = ref<HTMLElement | null>(null)
                 </div>
                 <div class="overlay-after" />
               </div>
+            </div>
+          </div>
+          <div class="reply-list">
+            <div
+              v-for="reply in showReplies(comment.replyList, limit, idx)"
+              :key="reply.replyid"
+              class="reply"
+            >
+              <span class="replier">{{ reply.replier }}: </span>
+              <span class="reply-content">{{ reply.replycontent }}</span>
+            </div>
+            <div class="all-reply">
+              <span v-show="!comment.replyList.length"> 暂无回复 </span>
+              <span v-show="isShowLess(comment.replyList, idx)" @click="unfoldReplies(comment.replyList, idx)">
+                展开<i class="iconfont icon-xiangxiajiantou" />
+              </span>
+              <span v-show="isShowMore(comment.replyList, idx)" @click="foldReplies()">
+                收起<i class="iconfont icon-xiangshangjiantou" />
+              </span>
             </div>
           </div>
         </div>
@@ -198,6 +219,22 @@ const replyOverlayRef = ref<HTMLElement | null>(null)
               opacity: 0.5;
               z-index: 999;
             }
+          }
+        }
+      }
+      .reply-list {
+        margin-top: 0.18rem;
+        line-height: 0.5rem;
+        width: 4.6rem;
+        font-size: 0.2rem;
+        background-color: #f6f6f6;
+        border-radius: 0.1rem;
+        .reply {
+          .replier {
+            color: #526198;
+          }
+          &-content {
+            font-family: serif;
           }
         }
       }
