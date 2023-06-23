@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useBookStore } from '../books'
 import commentAPI from '@/api/CommentAPI'
+import replyAPI from '@/api/ReplyAPI'
 
 export interface Comment {
   commentid: number
@@ -16,9 +17,10 @@ export interface Comment {
   replyList: Reply[]
 }
 export interface Reply {
-  replyid: number
+  replyid?: number
   replycontent: string
-  replydate: string
+  replydate?: string
+  strReplyDate: string
   replier: string
   evalid: number
 }
@@ -52,6 +54,13 @@ export const useCommentStore = defineStore('comment', {
     async findCommentList() {
       const commentsWithReplyList = await commentAPI.findCommentList(this.getBookISBN)
       this.commentList = commentsWithReplyList.data
+    },
+    async addReply(reply: Reply) {
+      const dbReply = await replyAPI.addReply(reply)
+      const comment = this.commentList.find(comment => comment.commentid === reply.evalid)
+      comment
+        && comment.replyList.push(dbReply.data) // avoid extra request
+      return comment
     },
   },
 })

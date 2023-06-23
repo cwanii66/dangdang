@@ -1,6 +1,11 @@
 import { ref } from 'vue'
+import { CommentService } from '.'
 import type { Reply } from '@/pstore/comment'
+import { useCommentStore } from '@/pstore/comment'
+import { useUserStore } from '@/pstore/user'
 
+const userStore = useUserStore()
+const commentStore = useCommentStore()
 export class ReplyService {
   static limit = ref<number>(2)
   static activeCommentIndex = ref<number>(-1) // XXX: please find a better workaround
@@ -37,5 +42,30 @@ export class ReplyService {
       ReplyService.activeCommentIndex.value !== -1 // have active comment
       && ReplyService.activeCommentIndex.value !== idx // not current comment
     ) return true
+  }
+
+  static composeReply(replyContent: string, commentid: number) {
+    const userinfo = userStore.getLoginUser
+    const replyDate = new Date().toLocaleDateString().split('/').join('-')
+    const reply = {
+      replycontent: replyContent,
+      strReplyDate: replyDate,
+      replier: userinfo.username,
+      evalid: commentid,
+    }
+    return reply
+  }
+
+  static hideReplyPanel(event: Event) {
+    const replyBtn = event.currentTarget as HTMLElement
+    const replyPanel = replyBtn.parentElement!.parentElement as HTMLElement
+    replyPanel.style.display = 'none'
+  }
+
+  static async addReply(event: Event, replyContent: string, commentid: number) {
+    const reply = ReplyService.composeReply(replyContent, commentid)
+    ReplyService.hideReplyPanel(event)
+    CommentService.setReplyShowIndex(-1)
+    await commentStore.addReply(reply)
   }
 }

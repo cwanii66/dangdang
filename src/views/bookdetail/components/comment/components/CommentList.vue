@@ -5,10 +5,11 @@ import { CommentService, ReplyService } from '../../../service'
 import getImg from '@/utils/imgUtil'
 
 const { commentList, reply, cancelReply, replyShowIndex } = CommentService
-const { showReplies, limit, unfoldReplies, foldReplies, isShowMore, isShowLess } = ReplyService
+const { showReplies, limit, unfoldReplies, foldReplies, isShowMore, isShowLess, addReply } = ReplyService
 
 const commentsRef = ref<HTMLElement | null>(null)
 const replyOverlayRef = ref<HTMLElement | null>(null)
+const replyContent = ref<string>('')
 </script>
 
 <template>
@@ -50,8 +51,8 @@ const replyOverlayRef = ref<HTMLElement | null>(null)
               <div class="reply-panel">
                 <div ref="replyOverlayRef" class="overlay-before" />
                 <div class="publish-area">
-                  <textarea class="reply-content" :placeholder="`回复 ${comment.commentuser}`" />
-                  <span class="reply-post">发表</span>
+                  <textarea v-model="replyContent" class="reply-content" :placeholder="`回复 ${comment.commentuser}`" />
+                  <span class="reply-post" @click.self="addReply($event, replyContent, comment.commentid)">发表</span>
                 </div>
                 <div class="overlay-after" />
               </div>
