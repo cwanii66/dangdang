@@ -8,9 +8,10 @@ export function getValArrOfObj<T extends any[], K extends keyof ElOfArr<T>>(arr:
 }
 
 export enum OPTION {
+  NONE = -1,
   ACCUMULATE = 0,
   ADDORAPPEND = 1,
-  NONE = -1,
+  ARRAY = 2,
 }
 
 enum Operate {
@@ -75,7 +76,7 @@ class Storage {
   get(key: string): any
   get(key: string, option: OPTION): any
   get(key: string, option: OPTION = OPTION.NONE): any {
-    if (option === OPTION.ACCUMULATE || option === OPTION.ADDORAPPEND)
+    if (option === OPTION.ACCUMULATE || option === OPTION.ARRAY || option === OPTION.ADDORAPPEND)
       return storage.get(key, [])
     else return storage.get(key)
   }

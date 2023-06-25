@@ -14,9 +14,13 @@ searchBooks()
     <div
       v-for="bookItem in getBookList"
       :key="bookItem.ISBN" class="book-item"
-      @click="toBookDetail(bookItem.ISBN)"
     >
-      <img class="bookpic" :src="getImg(bookItem.bookpicname)" alt="book image">
+      <img
+        class="bookpic"
+        :src="getImg(bookItem.bookpicname)"
+        alt="book image"
+        @click="toBookDetail(bookItem.ISBN)"
+      >
       <div class="bookinfo">
         <div class="bookinfo-brief">
           <div class="book-name">

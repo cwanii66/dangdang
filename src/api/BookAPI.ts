@@ -25,6 +25,10 @@ class BookAPI {
   findBooksByISBN(isbn: string) {
     return request.get(`/bookmodule/findBooksByISBN/${isbn}`, false)
   }
+
+  findBooksWithPager(currentPageNo: number) {
+    return request.get(`/bookmodule/findBooksByPager/${currentPageNo}`, false)
+  }
 }
 
 export default BookAPI.bookAPI

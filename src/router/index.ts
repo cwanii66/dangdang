@@ -12,12 +12,18 @@ const login = () => import('@/views/user/Login.vue')
 const bookdetail = () => import('@/views/bookdetail/index.vue')
 const goods = () => import('@/views/bookdetail/components/Goods.vue')
 const comments = () => import('@/views/bookdetail/components/comment/index.vue')
+const home = () => import('@/views/home/Home.vue')
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'default',
-    redirect: '/ctgy',
+    component: home,
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: home,
   },
   {
     name: 'ctgy',

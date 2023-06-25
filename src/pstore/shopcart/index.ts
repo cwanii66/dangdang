@@ -31,7 +31,7 @@ export const useShopCartStore = defineStore('shopcart-store', {
   }),
   getters: {
     getShopCartList: (state): ShopCartInfo[] => {
-      return state.shopCartList.length > 0 ? state.shopCartList : storage.get('shopCartList', OPTION.ADDORAPPEND)
+      return state.shopCartList.length > 0 ? state.shopCartList : storage.get('shopCartList', OPTION.ARRAY)
     },
   },
   actions: {

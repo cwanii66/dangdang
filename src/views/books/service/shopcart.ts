@@ -38,6 +38,7 @@ export default class ShopCartService {
   static isSelectAll = ref<boolean>(false)
 
   static async findShopCartList() {
+    // TODO: logged user
     await shopCartStore.findShopCartList(1)
   }
 

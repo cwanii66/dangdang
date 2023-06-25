@@ -41,7 +41,7 @@ checkEvery()
     <div v-if="getShopCartList.length === 0">
       <EmptyShopCart />
     </div>
-    <div class="cal">
+    <div class="cal" v-if="getShopCartList.length">
       <span class="checkall">
         <input type="checkbox" class="check" v-model="isSelectAll" @change="selectAll">
         <span class="label">全选</span>

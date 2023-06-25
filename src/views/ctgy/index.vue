@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Bottom from '../common/Bottom.vue'
 import SearchBar from './components/SearchBar.vue'
 import Ctgy from './components/Ctgy.vue'
 </script>
@@ -6,6 +7,7 @@ import Ctgy from './components/Ctgy.vue'
 <template>
   <SearchBar />
   <Ctgy />
+  <Bottom />
 </template>
 
 <style scoped>

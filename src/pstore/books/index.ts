@@ -20,18 +20,25 @@ export interface BookInfo {
 }
 export type Publihser = Pick<BookInfo, 'publishid' | 'publishername'>
 
+export enum Operate {
+  INIT = 0,
+  THIRDCTGYID = 1,
+  AUTOCOMPKEYWORD = 2,
+}
+
+export interface CurrentPageData {
+  currentPageNo: number
+  currentPageDataList: BookInfo[]
+  totalPageNum: number
+}
+
 export interface BookState {
   bookList: BookInfo[]
   operate?: Operate
   publishers: Publihser[]
   bookDetail: BookInfo
   bookISBN: string
-}
-
-export enum Operate {
-  INIT = 0,
-  THIRDCTGYID = 1,
-  AUTOCOMPKEYWORD = 2,
+  currentPageData: CurrentPageData
 }
 
 const searchStore = useSearchStore()
@@ -50,6 +57,11 @@ export const useBookStore = defineStore('book-store', {
     publishers: [],
     bookDetail: {} as BookInfo,
     bookISBN: '',
+    currentPageData: {
+      currentPageNo: 0,
+      currentPageDataList: [],
+      totalPageNum: 0,
+    },
   }),
   getters: {
     getAutoCompKeyword: (): string => {
@@ -69,6 +81,12 @@ export const useBookStore = defineStore('book-store', {
     },
     getBookISBN: (state): string => {
       return state.bookISBN || storage.get('bookISBN')
+    },
+    isLastPage: (state): boolean => {
+      return state.currentPageData.currentPageNo === state.currentPageData.totalPageNum
+    },
+    getCurrentPageDataList: (state): BookInfo[] => {
+      return state.currentPageData.currentPageDataList
     },
   },
   actions: {
@@ -112,6 +130,20 @@ export const useBookStore = defineStore('book-store', {
       const bookDetail = await BookAPI.findBooksByISBN(this.getBookISBN)
       this.bookDetail = bookDetail.data
       storage.set('bookDetail', this.bookDetail)
+    },
+    async findBooksWithPager() {
+      if (this.currentPageData.currentPageNo <= this.currentPageData.totalPageNum) {
+        this.currentPageData.currentPageNo += 1
+        const currentPageData = await BookAPI.findBooksWithPager(this.currentPageData.currentPageNo)
+        if (this.currentPageData.currentPageDataList.length === 0) {
+          this.currentPageData = currentPageData.data // directly overwrite
+        }
+        else { // append
+          const { currentPageNo, totalPageNum } = currentPageData.data
+          this.currentPageData.currentPageDataList.push(...currentPageData.data.currentPageDataList)
+          Object.assign(this.currentPageData, { currentPageNo, totalPageNum })
+        }
+      }
     },
   },
 })
