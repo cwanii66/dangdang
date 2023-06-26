@@ -13,7 +13,7 @@ const booksRef = ref<HTMLElement | null>(null)
 
 findBooksWithPager()
 
-useEventListener('scroll', throttle(pageScroll, 1000))
+useEventListener('scroll', throttle(pageScroll, 800))
 </script>
 
 <template>

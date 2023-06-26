@@ -1,13 +1,28 @@
 <script setup lang="ts">
+import { useEventListener } from '@vueuse/core'
+import { onMounted } from 'vue'
 import Bottom from '../common/Bottom.vue'
 import Header from './components/Header.vue'
 import Nav from './components/Nav.vue'
 import BookList from './components/BookList.vue'
+import { HomeService } from './service'
+
+const { headerScroll, init } = HomeService
+const { headerRef, headerOpacity } = HomeService.bookStoreRefs
+
+onMounted(() => {
+  init()
+})
+useEventListener('scroll', headerScroll)
 </script>
 
 <template>
   <div class="container">
-    <div class="header-wrapper">
+    <div
+      ref="headerRef"
+      class="header-wrapper"
+      :style="headerOpacity"
+    >
       <Header />
     </div>
     <Nav />

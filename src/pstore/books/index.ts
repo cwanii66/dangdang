@@ -39,6 +39,9 @@ export interface BookState {
   bookDetail: BookInfo
   bookISBN: string
   currentPageData: CurrentPageData
+  headerRef: HTMLElement | undefined
+  headerOpacity: { opacity: number }
+  headerHeight: number
 }
 
 const searchStore = useSearchStore()
@@ -57,11 +60,18 @@ export const useBookStore = defineStore('book-store', {
     publishers: [],
     bookDetail: {} as BookInfo,
     bookISBN: '',
+
     currentPageData: {
       currentPageNo: 0,
       currentPageDataList: [],
       totalPageNum: 0,
     },
+
+    headerRef: undefined,
+    headerOpacity: {
+      opacity: 1,
+    },
+    headerHeight: 0,
   }),
   getters: {
     getAutoCompKeyword: (): string => {
@@ -83,7 +93,7 @@ export const useBookStore = defineStore('book-store', {
       return state.bookISBN || storage.get('bookISBN')
     },
     isLastPage: (state): boolean => {
-      return state.currentPageData.currentPageNo >= state.currentPageData.totalPageNum // exceed or equal -> last page
+      return state.currentPageData.currentPageNo === state.currentPageData.totalPageNum
     },
     getCurrentPageDataList: (state): BookInfo[] => {
       return state.currentPageData.currentPageDataList
@@ -132,9 +142,10 @@ export const useBookStore = defineStore('book-store', {
       storage.set('bookDetail', this.bookDetail)
     },
     async findBooksWithPager() {
-      if (this.currentPageData.currentPageNo > this.currentPageData.totalPageNum)
-        return // avoid extra request
-      if (this.currentPageData.currentPageNo <= this.currentPageData.totalPageNum) {
+      if (
+        !this.currentPageData.currentPageNo // initial request
+          || this.currentPageData.currentPageNo < this.currentPageData.totalPageNum
+      ) {
         this.currentPageData.currentPageNo += 1
         const currentPageData = await BookAPI.findBooksWithPager(this.currentPageData.currentPageNo)
         if (this.currentPageData.currentPageDataList.length === 0) {
