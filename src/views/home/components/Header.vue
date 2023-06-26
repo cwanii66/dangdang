@@ -1,9 +1,19 @@
 <script setup lang="ts">
+import { useEventListener } from '@vueuse/core'
+import { onMounted } from 'vue'
+import { HomeService } from '../service'
 
+const { headerScroll, init } = HomeService
+const { headerRef, headerOpacity } = HomeService.bookStoreRefs
+
+onMounted(() => {
+  init()
+})
+useEventListener('scroll', headerScroll)
 </script>
 
 <template>
-  <div class="header">
+  <div ref="headerRef" class="header" :style="headerOpacity">
     <h1 class="header-title">
       当当
     </h1>

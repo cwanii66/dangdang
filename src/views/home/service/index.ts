@@ -28,6 +28,7 @@ export class HomeService {
         ? 1
         : headerScroll
     const isDisplayHeader = opacity > 0
+
     headerOpacity.value.opacity = opacity
     headerRef.value!.style.display = isDisplayHeader ? 'block' : 'none'
   }
