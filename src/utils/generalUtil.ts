@@ -41,3 +41,15 @@ export type EleOfArr<T> = T extends Array<infer U> ? U : never
 export function pickValsFromObjArr<T extends any[], K extends keyof EleOfArr<T>, E = EleOfArr<T>>(arr: T, key: K) {
   return arr.map(({ [key]: val }: E) => val)
 }
+
+export function throttle(fn: Function, delay: number) {
+  let timer: any = null
+  return function (this: any, ...args: any) {
+    if (!timer) {
+      timer = setTimeout(() => {
+        fn.apply(this, args)
+        timer = null
+      }, delay)
+    }
+  }
+}

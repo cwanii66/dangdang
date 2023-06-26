@@ -1,23 +1,28 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useEventListener } from '@vueuse/core'
+import Loading from '../components/Loading.vue'
 import { HomeService } from '../service'
 import getImg from '@/utils/imgUtil'
+import { throttle } from '@/utils/generalUtil'
 
-const { getCurrentPageDataList } = HomeService.bookStoreRefs
-const { findBooksWithPager } = HomeService
+const { getCurrentPageDataList, isLastPage } = HomeService.bookStoreRefs
+const { findBooksWithPager, pageScroll } = HomeService
 
 const booksRef = ref<HTMLElement | null>(null)
 
 findBooksWithPager()
+
+useEventListener('scroll', throttle(pageScroll, 1000))
 </script>
 
 <template>
   <div class="dangdang-books">
     <div ref="booksRef" class="dangdang-books-wrapper">
       <div
-        class="dangdang-books-item"
         v-for="bookItem in getCurrentPageDataList"
         :key="bookItem.ISBN"
+        class="dangdang-books-item"
       >
         <div class="dangdang-books-pic">
           <img class="bookpic" :src="getImg(bookItem.bookpicname)">
@@ -39,6 +44,12 @@ findBooksWithPager()
           </div>
         </div>
       </div>
+    </div>
+    <div v-show="!isLastPage" class="dangdang-books-loading">
+      <Loading />
+    </div>
+    <div v-show="isLastPage" class="dangdang-books-bottom">
+      到底了
     </div>
   </div>
 </template>
@@ -125,6 +136,14 @@ findBooksWithPager()
         }
       }
     }
+  }
+  &-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 0.5rem;
+    font-size: 0.2rem;
+    color: #7f7f7f;
   }
 }
 .dangdang-books::after {

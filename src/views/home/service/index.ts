@@ -8,4 +8,10 @@ export class HomeService {
   static async findBooksWithPager() {
     await bookStore.findBooksWithPager()
   }
+
+  static async pageScroll() {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement || document.body
+    if (scrollTop + clientHeight >= scrollHeight)
+      await bookStore.findBooksWithPager()
+  }
 }

@@ -83,7 +83,7 @@ export const useBookStore = defineStore('book-store', {
       return state.bookISBN || storage.get('bookISBN')
     },
     isLastPage: (state): boolean => {
-      return state.currentPageData.currentPageNo === state.currentPageData.totalPageNum
+      return state.currentPageData.currentPageNo >= state.currentPageData.totalPageNum // exceed or equal -> last page
     },
     getCurrentPageDataList: (state): BookInfo[] => {
       return state.currentPageData.currentPageDataList
@@ -132,6 +132,8 @@ export const useBookStore = defineStore('book-store', {
       storage.set('bookDetail', this.bookDetail)
     },
     async findBooksWithPager() {
+      if (this.currentPageData.currentPageNo > this.currentPageData.totalPageNum)
+        return // avoid extra request
       if (this.currentPageData.currentPageNo <= this.currentPageData.totalPageNum) {
         this.currentPageData.currentPageNo += 1
         const currentPageData = await BookAPI.findBooksWithPager(this.currentPageData.currentPageNo)
