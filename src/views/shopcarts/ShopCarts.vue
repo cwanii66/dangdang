@@ -49,7 +49,7 @@ checkEvery()
           合计: <span class="money">&yen;{{ totalBookPrice }}</span>
         </span>
       </span>
-      <span class="settlement">去结算({{ totalBookNum }})</span>
+      <span class="settlement" @click="$router.push({ name: 'order' })">去结算({{ totalBookNum }})</span>
     </div>
   </div>
 </template>

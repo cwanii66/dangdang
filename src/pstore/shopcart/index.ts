@@ -16,6 +16,8 @@ export interface ShopCartInfo {
 
 export interface ShopCartState {
   shopCartList: ShopCartInfo[]
+  checkedShopCartList: ShopCartInfo[]
+  subCheckedShopCartList: ShopCartInfo[]
 }
 
 function storeShopCart(response: AxiosResponse<ShopCartInfo>) {
@@ -28,13 +30,22 @@ function storeShopCart(response: AxiosResponse<ShopCartInfo>) {
 export const useShopCartStore = defineStore('shopcart-store', {
   state: (): ShopCartState => ({
     shopCartList: [],
+    checkedShopCartList: [],
+    subCheckedShopCartList: [],
   }),
   getters: {
     getShopCartList: (state): ShopCartInfo[] => {
       return state.shopCartList.length > 0 ? state.shopCartList : storage.get('shopCartList', OPTION.ARRAY)
     },
+    getCheckedShopCartList: (state): ShopCartInfo[] => {
+      return state.checkedShopCartList.length > 0 ? state.checkedShopCartList : storage.get('checkedShopCartList', OPTION.ARRAY)
+    },
   },
   actions: {
+    setCheckedShopCartList() {
+      this.checkedShopCartList = this.getShopCartList.filter(item => item.checked)
+      storage.set('checkedShopCartList', this.checkedShopCartList)
+    },
     storeShopCartList(shopCartList: ShopCartInfo[]) {
       this.shopCartList = shopCartList
       storage.set('shopCartList', shopCartList)

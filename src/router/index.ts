@@ -13,6 +13,7 @@ const bookdetail = () => import('@/views/bookdetail/index.vue')
 const goods = () => import('@/views/bookdetail/components/Goods.vue')
 const comments = () => import('@/views/bookdetail/components/comment/index.vue')
 const home = () => import('@/views/home/Home.vue')
+const order = () => import('@/views/order/index.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -81,6 +82,11 @@ const routes: RouteRecordRaw[] = [
         component: comments,
       },
     ],
+  },
+  {
+    path: '/order',
+    name: 'order',
+    component: order,
   },
 ]
 
