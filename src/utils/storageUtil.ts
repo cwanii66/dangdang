@@ -73,9 +73,9 @@ class Storage {
     }
   }
 
-  get(key: string): any
-  get(key: string, option: OPTION): any
-  get(key: string, option: OPTION = OPTION.NONE): any {
+  get<T = any>(key: string): T
+  get<T = any>(key: string, option: OPTION): T
+  get(key: string, option: OPTION = OPTION.NONE) {
     if (option === OPTION.ACCUMULATE || option === OPTION.ARRAY || option === OPTION.ADDORAPPEND)
       return storage.get(key, [])
     else return storage.get(key)

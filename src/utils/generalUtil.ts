@@ -53,3 +53,13 @@ export function throttle(fn: Function, delay: number) {
     }
   }
 }
+
+/**
+ * @returns formatted Date, separator is optional
+ * @example
+ * 2023-06-29
+ * 2023/06/29
+ */
+export function getFormattedDate(delimiter: string) {
+  return new Date().toLocaleDateString().split('/').join(delimiter)
+}

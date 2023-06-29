@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { OrderService } from '../service'
 
-const { calcCheckedPrice } = OrderService
+const { calcCheckedPrice, submitOrder } = OrderService
+const { getCheckedShopCartList } = OrderService.shopCartStoreRefs
 const checkedBookPrice = calcCheckedPrice()
 </script>
 
 <template>
-  <div class="submitto">
+  <div v-show="getCheckedShopCartList.length" class="submitto">
     <div class="payable">
       <span class="tag">实付：</span>
       <span class="money">&yen;{{ checkedBookPrice }}</span>
     </div>
-    <div class="submitto-order">
+    <div class="submitto-order" @click="submitOrder()">
       <span>提交订单</span>
     </div>
   </div>

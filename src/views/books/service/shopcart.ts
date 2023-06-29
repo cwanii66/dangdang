@@ -7,6 +7,7 @@ import type { BookInfo } from '@/pstore/books'
 import type { ShopCartInfo } from '@/pstore/shopcart'
 import router from '@/router'
 import storage from '@/utils/storageUtil'
+import type { UserInfo } from '@/pstore/user'
 
 interface Ball {
   isHidden: boolean
@@ -38,8 +39,8 @@ export default class ShopCartService {
   static isSelectAll = ref<boolean>(false)
 
   static async findShopCartList() {
-    // TODO: logged user
-    await shopCartStore.findShopCartList(1)
+    const userid = storage.get<UserInfo>('loginUser').userid
+    await shopCartStore.findShopCartList(userid)
   }
 
   static udBkNumWithSCLstNum(books: BookInfo[]) {

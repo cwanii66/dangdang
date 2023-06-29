@@ -3,6 +3,7 @@ import { CommentService } from '.'
 import type { Reply } from '@/pstore/comment'
 import { useCommentStore } from '@/pstore/comment'
 import { useUserStore } from '@/pstore/user'
+import { getFormattedDate } from '@/utils/generalUtil'
 
 const userStore = useUserStore()
 const commentStore = useCommentStore()
@@ -46,7 +47,7 @@ export class ReplyService {
 
   static composeReply(replyContent: string, commentid: number) {
     const userinfo = userStore.getLoginUser
-    const replyDate = new Date().toLocaleDateString().split('/').join('-')
+    const replyDate = getFormattedDate('-')
     const reply = {
       replycontent: replyContent,
       strReplyDate: replyDate,

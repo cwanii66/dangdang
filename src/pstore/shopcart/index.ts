@@ -50,6 +50,9 @@ export const useShopCartStore = defineStore('shopcart-store', {
       this.shopCartList = shopCartList
       storage.set('shopCartList', shopCartList)
     },
+    clearStateCache() {
+      Object.keys(this.$state).forEach(i => storage.remove(i))
+    },
 
     async findShopCartList(userid: number) {
       const { data } = await shopCartAPI.getShopCartList(userid)
