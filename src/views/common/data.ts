@@ -18,7 +18,7 @@ export const bottomNavList = [
   {
     icon: 'iconfont  icon-my_light',
     text: '我的',
-    url: '/ctgy',
+    url: '/ordersort',
   },
 ]
 

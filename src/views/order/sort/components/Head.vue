@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { OrderService } from '../../service'
 
 const orderinfos = ['全部订单', '待付款', '待收货', '待评价', '|', '筛选'] as const
-const activeIndex = ref<number>(0)
-
-function changeTab(index: number) {
-  activeIndex.value = index
-}
+const { changeOrderStatus } = OrderService
+const { orderStatus } = OrderService.orderStoreRefs
 </script>
 
 <template>
@@ -21,10 +18,10 @@ function changeTab(index: number) {
         v-for="(orderinfo, index) in orderinfos"
         :key="index"
         :class="{
-          'item-active': activeIndex === index && activeIndex !== 4,
+          'item-active': orderStatus === index && orderStatus !== 4,
         }"
         class="order-status-item"
-        @click="changeTab(index)"
+        @click="changeOrderStatus(index)"
       >
         {{ orderinfo }}
       </div>
@@ -38,7 +35,9 @@ function changeTab(index: number) {
   position: fixed;
   top: 0;
   height: 1.2rem;
-  margin-top: 0.2rem;
+  padding-top: 0.2rem;
+  background-color: #fff;
+  z-index: 999;
   .order-search {
     display: flex;
     height: 0.65rem;

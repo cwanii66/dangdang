@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import Head from './components/Head.vue'
+import OrderList from './components/OrderList.vue'
 </script>
 
 <template>
   <div class="order-sort-container">
     <Head />
+    <OrderList />
   </div>
 </template>
 

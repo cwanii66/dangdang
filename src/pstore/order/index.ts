@@ -28,6 +28,9 @@ export interface OrderDetail {
 export interface OrderStoreState {
   orderInfo: OrderInfo
   orderInfoList: OrderInfo[]
+  subOrderInfoList: OrderInfo[]
+
+  orderStatus: number
 }
 
 function isEmptyObj(obj: any) {
@@ -56,15 +59,18 @@ function orderStatusTrans(orderInfoList: OrderInfo[]) {
 
 export const useOrderStore = defineStore('order-store', {
   state: (): OrderStoreState => ({
+    orderStatus: 0,
+
     orderInfo: {} as OrderInfo,
     orderInfoList: [],
+    subOrderInfoList: [],
   }),
   getters: {
     getOrderInfo(state) {
-      return isEmptyObj(state.orderInfo) ? storage.get('orderInfo') : state.orderInfo
+      return isEmptyObj(state.orderInfo) ? storage.get<OrderInfo>('orderInfo') : state.orderInfo
     },
     getOrderInfoList(state) {
-      return state.orderInfoList.length ? state.orderInfoList : storage.get('orderInfoList', OPTION.ARRAY)
+      return state.orderInfoList.length ? state.orderInfoList : storage.get<OrderInfo[]>('orderInfoList', OPTION.ARRAY)
     },
   },
   actions: {

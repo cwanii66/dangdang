@@ -1,4 +1,4 @@
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import { storeToRefs } from 'pinia'
 import router from '@/router'
 import { useShopCartStore } from '@/pstore/shopcart'
@@ -15,6 +15,8 @@ export class OrderService {
   static isShowLeftArrow = computed(() => OrderService.startIndex.value > 0)
   static isShowRightArrow = computed(() => OrderService.endIndex.value < shopCartStore.getCheckedShopCartList.length)
 
+  static orderSumRecord = new Map<number, number>()
+
   static async submitOrder() {
     await orderStore.submitOrder()
     shopCartStore.clearStateCache()
@@ -23,6 +25,17 @@ export class OrderService {
 
   static async findOrderByUserId() {
     await orderStore.findOrderByUserId()
+    OrderService.getSubOrders()
+  }
+
+  static calcSubmitSum() {
+    orderStore.getOrderInfoList.forEach((orderInfo) => {
+      let totalPrice = 0
+      orderInfo.orderDetailList!.forEach((orderDetail) => {
+        totalPrice += orderDetail.bookprice * orderDetail.purchasenum
+      })
+      OrderService.orderSumRecord.set(orderInfo.orderid!, +totalPrice.toFixed(2))
+    })
   }
 
   static setCheckedShopCartList() {
@@ -48,5 +61,29 @@ export class OrderService {
         .getCheckedShopCartList
         .reduce((acc, cur) => acc += cur.purchasenum * cur.bookprice, 0)
     return checkedBookPrice.toFixed(2)
+  }
+
+  static changeOrderStatus(status: number) {
+    orderStore.orderStatus = status
+  }
+
+  static getSubOrders() {
+    watch(
+      () => orderStore.orderStatus,
+      () => {
+        if (orderStore.orderStatus === 0 || orderStore.orderStatus > 3) {
+          orderStore.subOrderInfoList = orderStore.getOrderInfoList
+        }
+        else {
+          orderStore.subOrderInfoList
+          = orderStore.getOrderInfoList.filter((orderInfo) => {
+              return orderInfo.orderstatus === orderStore.orderStatus
+            })
+        }
+      },
+      {
+        immediate: true,
+      },
+    )
   }
 }
