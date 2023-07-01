@@ -11,6 +11,8 @@ export interface OrderInfo {
   customerid: number
   orderstatus: number
   orderDetailList?: OrderDetail[]
+  // transform status
+  strOrderStatus?: string
 }
 
 export interface OrderDetail {
@@ -25,19 +27,44 @@ export interface OrderDetail {
 
 export interface OrderStoreState {
   orderInfo: OrderInfo
+  orderInfoList: OrderInfo[]
 }
 
 function isEmptyObj(obj: any) {
   return Object.keys(obj).length === 0
 }
 
+function orderStatusTrans(orderInfoList: OrderInfo[]) {
+  return orderInfoList.map((orderInfo) => {
+    switch (orderInfo.orderstatus) {
+      case 1:
+        orderInfo.strOrderStatus = '等待付款'
+        break
+      case 2:
+        orderInfo.strOrderStatus = '交易成功'
+        break
+      case 3:
+        orderInfo.strOrderStatus = '待评价'
+        break
+      case -1:
+        orderInfo.strOrderStatus = '订单已取消'
+        break
+    }
+    return orderInfo
+  })
+}
+
 export const useOrderStore = defineStore('order-store', {
   state: (): OrderStoreState => ({
     orderInfo: {} as OrderInfo,
+    orderInfoList: [],
   }),
   getters: {
     getOrderInfo(state) {
       return isEmptyObj(state.orderInfo) ? storage.get('orderInfo') : state.orderInfo
+    },
+    getOrderInfoList(state) {
+      return state.orderInfoList.length ? state.orderInfoList : storage.get('orderInfoList', OPTION.ARRAY)
     },
   },
   actions: {
@@ -68,6 +95,13 @@ export const useOrderStore = defineStore('order-store', {
       // 5. preserve the response data to store and client storage
       this.orderInfo = responseOrderData.data
       storage.set('orderInfo', this.orderInfo)
+    },
+
+    async findOrderByUserId() {
+      const userId = storage.get<UserInfo>('loginUser').userid
+      const ordersResponse = await orderAPI.findOrderByUserId(userId)
+      this.orderInfoList = orderStatusTrans(ordersResponse.data)
+      storage.set('orderInfoList', this.orderInfoList)
     },
   },
 })

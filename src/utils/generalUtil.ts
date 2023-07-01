@@ -55,11 +55,14 @@ export function throttle(fn: Function, delay: number) {
 }
 
 /**
- * @returns formatted Date, separator is optional
+ * @returns formatted Date, separator is for date part
  * @example
- * 2023-06-29
- * 2023/06/29
+ * 2023-06-29 10:15:30
+ * 2023/06/29 10:15:30
  */
 export function getFormattedDate(delimiter: string) {
-  return new Date().toLocaleDateString().split('/').join(delimiter)
+  const date = new Date()
+  const datePart = date.toLocaleDateString().split('/').join(delimiter)
+  const timePart = date.toLocaleTimeString()
+  return `${datePart} ${timePart}`
 }

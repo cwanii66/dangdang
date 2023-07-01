@@ -1,5 +1,6 @@
 import { computed, ref, watchEffect } from 'vue'
 import { storeToRefs } from 'pinia'
+import router from '@/router'
 import { useShopCartStore } from '@/pstore/shopcart'
 import { useOrderStore } from '@/pstore/order'
 
@@ -17,6 +18,11 @@ export class OrderService {
   static async submitOrder() {
     await orderStore.submitOrder()
     shopCartStore.clearStateCache()
+    router.push({ name: 'ordersort' })
+  }
+
+  static async findOrderByUserId() {
+    await orderStore.findOrderByUserId()
   }
 
   static setCheckedShopCartList() {
@@ -37,8 +43,10 @@ export class OrderService {
   }
 
   static calcCheckedPrice() {
-    return shopCartStore
-      .getCheckedShopCartList
-      .reduce((acc, cur) => acc += cur.purchasenum * cur.bookprice, 0)
+    const checkedBookPrice
+      = shopCartStore
+        .getCheckedShopCartList
+        .reduce((acc, cur) => acc += cur.purchasenum * cur.bookprice, 0)
+    return checkedBookPrice.toFixed(2)
   }
 }
