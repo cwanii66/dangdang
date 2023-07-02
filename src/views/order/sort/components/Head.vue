@@ -9,7 +9,7 @@ const { orderStatus } = OrderService.orderStoreRefs
 <template>
   <div class="order-header">
     <div class="order-search">
-      <i class="iconfont icon-zuojiantou left-arrow" />
+      <i class="iconfont icon-zuojiantou left-arrow" @click="$router.back()" />
       <i class="iconfont icon-fangdajing magnifier" />
       <input id="input" type="text" placeholder="搜索我的订单" class="keyword-input">
     </div>

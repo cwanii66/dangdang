@@ -11,6 +11,10 @@ class OrderAPI {
   findOrderByUserId(userId: number) {
     return request.get(`/ordermodule/findorderbyuserid/${userId}`, false)
   }
+
+  updateOrderStatusByOrderId(orderId: number) {
+    return request.put('/ordermodule/updateorderstatusbyorderid', false, { orderId })
+  }
 }
 
 export default OrderAPI.orderAPI

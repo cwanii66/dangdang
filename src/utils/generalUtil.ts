@@ -66,3 +66,28 @@ export function getFormattedDate(delimiter: string) {
   const timePart = date.toLocaleTimeString()
   return `${datePart} ${timePart}`
 }
+
+/**
+ * @param restTime rest time in milliseconds
+ * @returns formatted countdown time
+ * @example
+ * 1天 10小时 15分 30秒
+ */
+export function countDownConvert(restTime: number) {
+  const day = Math.floor(restTime / 86400000)
+  const hour = Math.floor((restTime / 3600000) % 24)
+  const min = Math.floor((restTime / 60000) % 60)
+  const sec = Math.floor((restTime / 1000) % 60)
+
+  const formatParts = []
+  if (day > 0)
+    formatParts.push(`${day}天`)
+
+  if (hour > 0)
+    formatParts.push(`${hour}小时`)
+
+  formatParts.push(`${min < 10 ? '0' : ''}${min}分`)
+  formatParts.push(`${sec < 10 ? '0' : ''}${sec}秒`)
+
+  return formatParts.join(' ')
+}

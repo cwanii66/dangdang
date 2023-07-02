@@ -61,4 +61,3 @@ import { activeIndex, setActiveIndex } from './common'
   }
 }
 </style>
-./common

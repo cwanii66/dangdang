@@ -2,15 +2,16 @@
 import { OrderService } from '../../service'
 import getImg from '@/utils/imgUtil'
 
-const { findOrderByUserId, calcSubmitSum, orderSumRecord } = OrderService
+const { findOrderByUserId, loopTiming, calcSubmitSum, orderSumRecord } = OrderService
 findOrderByUserId()
-calcSubmitSum() // make sure data is set in orderSumRecord
+calcSubmitSum()
+loopTiming()
 
 const { subOrderInfoList } = OrderService.orderStoreRefs
 </script>
 
 <template>
-  <div v-if="subOrderInfoList.length" class="order">
+  <div class="order">
     <div
       v-for="orderInfo in subOrderInfoList"
       :key="orderInfo.orderid"
@@ -45,13 +46,13 @@ const { subOrderInfoList } = OrderService.orderStoreRefs
         </div>
       </div>
       <div class="order-total-price">
-        合计：&nbsp;&yen; {{ orderSumRecord.get(orderInfo.orderid!) }}
+        合计： &yen; {{ orderSumRecord.get(orderInfo.orderid!) }}
       </div>
       <div v-if="orderInfo.orderstatus === 1" class="other">
         <div class="cut-down">
           <i class="iconfont icon-daojishi clock" />
           <span>支付结束：</span>
-          <span class="countdowntime">00分30秒</span>
+          <span class="countdowntime">{{ orderInfo.countDownTime }}</span>
         </div>
         <div class="pay-or-cancelord">
           <span class="cancel-order">取消订单</span>
@@ -61,11 +62,11 @@ const { subOrderInfoList } = OrderService.orderStoreRefs
     </div>
     <div v-show="!subOrderInfoList.length" class="empty-order">
       <div class="noorder-descr">
-        <span><i class="iconfont icon-zanwudingdan" /> </span>
+        <i class="iconfont icon-zanwudingdan empty-order-icon" />
         <span>您暂无订单</span>
       </div>
       <div class="noorder-pic">
-        <img :src="getImg('noorder.png')">
+        <img class="img" :src="getImg('noorder.png')">
       </div>
     </div>
   </div>
@@ -202,6 +203,37 @@ const { subOrderInfoList } = OrderService.orderStoreRefs
             border-radius: 0.3rem;
             color: #fff;
           }
+      }
+    }
+  }
+  .empty-order {
+    width: 100%;
+    height: 36vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .noorder-descr {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.1rem;
+      span:nth-child(2) {
+        font-size: 0.3rem;
+        color: #989898;
+      }
+      .empty-order-icon {
+        font-size: 0.36rem;
+        color: #989898;
+      }
+    }
+    .noorder-pic {
+      display: flex;
+      justify-content: center;
+      margin-top: 0.2rem;
+      .img {
+        width: 2rem;
+        height: 2rem;
+        object-fit: contain;
       }
     }
   }

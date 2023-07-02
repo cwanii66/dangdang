@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Head from './components/Head.vue'
 import OrderList from './components/OrderList.vue'
+import Bottom from '@/views/common/Bottom.vue'
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import OrderList from './components/OrderList.vue'
     <Head />
     <OrderList />
   </div>
+  <Bottom />
 </template>
 
 <style lang="scss" scoped>

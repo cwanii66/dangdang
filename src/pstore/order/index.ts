@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import type { UserInfo } from '../user'
 import type { ShopCartInfo } from '../shopcart'
 import orderAPI from '@/api/OrderAPI'
-import { getFormattedDate } from '@/utils/generalUtil'
+import { countDownConvert, getFormattedDate } from '@/utils/generalUtil'
 import storage, { OPTION } from '@/utils/storageUtil'
 
 export interface OrderInfo {
@@ -11,8 +11,11 @@ export interface OrderInfo {
   customerid: number
   orderstatus: number
   orderDetailList?: OrderDetail[]
-  // transform status
-  strOrderStatus?: string
+
+  strOrderStatus?: string // switch status
+  countDownTime?: string // show order countdown
+  orderEndTime?: number
+  countDownFn?: NodeJS.Timer // countdown execution fn
 }
 
 export interface OrderDetail {
@@ -37,7 +40,7 @@ function isEmptyObj(obj: any) {
   return Object.keys(obj).length === 0
 }
 
-function orderStatusTrans(orderInfoList: OrderInfo[]) {
+export function orderStatusTrans(orderInfoList: OrderInfo[]) {
   return orderInfoList.map((orderInfo) => {
     switch (orderInfo.orderstatus) {
       case 1:
@@ -53,6 +56,27 @@ function orderStatusTrans(orderInfoList: OrderInfo[]) {
         orderInfo.strOrderStatus = '订单已取消'
         break
     }
+    return orderInfo
+  })
+}
+
+export function getRestTime(orderInfo: OrderInfo) {
+  const restTime = orderInfo.orderEndTime! - new Date().getTime()
+  const restSec = Math.floor(restTime / 1000)
+
+  return { restTime, restSec } as const
+}
+
+export function setCountDownTime(orderInfo: OrderInfo) {
+  const { restSec, restTime } = getRestTime(orderInfo)
+  if (restSec > 0)
+    orderInfo.countDownTime = countDownConvert(restTime)
+}
+export function setOrderTime(orderInfoList: OrderInfo[]) {
+  return orderInfoList.map((orderInfo) => {
+    if (orderInfo.orderstatus === 1)
+      orderInfo.orderEndTime = new Date(orderInfo.ordertime).getTime() + 1000 * 60 * 1 // end after 1 minutes
+    setCountDownTime(orderInfo)
     return orderInfo
   })
 }
@@ -106,8 +130,12 @@ export const useOrderStore = defineStore('order-store', {
     async findOrderByUserId() {
       const userId = storage.get<UserInfo>('loginUser').userid
       const ordersResponse = await orderAPI.findOrderByUserId(userId)
-      this.orderInfoList = orderStatusTrans(ordersResponse.data)
+      this.orderInfoList = setOrderTime(orderStatusTrans(ordersResponse.data))
       storage.set('orderInfoList', this.orderInfoList)
+    },
+
+    async updateOrderStatusByOrderId(orderId: number) {
+      await orderAPI.updateOrderStatusByOrderId(orderId)
     },
   },
 })

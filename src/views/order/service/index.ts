@@ -1,8 +1,9 @@
 import { computed, ref, watch, watchEffect } from 'vue'
 import { storeToRefs } from 'pinia'
 import router from '@/router'
+import { countDownConvert } from '@/utils/generalUtil'
 import { useShopCartStore } from '@/pstore/shopcart'
-import { useOrderStore } from '@/pstore/order'
+import { getRestTime, useOrderStore } from '@/pstore/order'
 
 const shopCartStore = useShopCartStore()
 export const orderStore = useOrderStore()
@@ -15,7 +16,7 @@ export class OrderService {
   static isShowLeftArrow = computed(() => OrderService.startIndex.value > 0)
   static isShowRightArrow = computed(() => OrderService.endIndex.value < shopCartStore.getCheckedShopCartList.length)
 
-  static orderSumRecord = new Map<number, number>()
+  static orderSumRecord = new Map<number, number>() // record the total price of each order
 
   static async submitOrder() {
     await orderStore.submitOrder()
@@ -26,16 +27,6 @@ export class OrderService {
   static async findOrderByUserId() {
     await orderStore.findOrderByUserId()
     OrderService.getSubOrders()
-  }
-
-  static calcSubmitSum() {
-    orderStore.getOrderInfoList.forEach((orderInfo) => {
-      let totalPrice = 0
-      orderInfo.orderDetailList!.forEach((orderDetail) => {
-        totalPrice += orderDetail.bookprice * orderDetail.purchasenum
-      })
-      OrderService.orderSumRecord.set(orderInfo.orderid!, +totalPrice.toFixed(2))
-    })
   }
 
   static setCheckedShopCartList() {
@@ -85,5 +76,38 @@ export class OrderService {
         immediate: true,
       },
     )
+  }
+
+  static calcSubmitSum() {
+    watchEffect(() => {
+      orderStore.getOrderInfoList.forEach((orderInfo) => {
+        let totalPrice = 0
+        orderInfo.orderDetailList!.forEach((orderDetail) => {
+          totalPrice += orderDetail.bookprice * orderDetail.purchasenum
+        })
+        OrderService.orderSumRecord.set(orderInfo.orderid!, +totalPrice.toFixed(2))
+      })
+    })
+  }
+
+  static loopTiming() {
+    watchEffect(() => {
+      orderStore.getOrderInfoList.forEach((orderInfo) => {
+        if (orderInfo.orderstatus === 1) {
+          orderInfo.countDownFn = setInterval(async () => {
+            const { restSec, restTime } = getRestTime(orderInfo)
+            if (restSec <= 0) { // 1. if the order is expired, then update the order status
+              clearInterval(orderInfo.countDownFn)
+              await orderStore.updateOrderStatusByOrderId(orderInfo.orderid!)
+              orderInfo.orderstatus = -1
+              orderInfo.strOrderStatus = '订单已取消'
+            }
+            else { // 2. if the order is not expired, then update the countDownTime
+              orderInfo.countDownTime = countDownConvert(restTime)
+            }
+          }, 1000)
+        }
+      })
+    })
   }
 }
